@@ -128,3 +128,76 @@ CREATE TABLE RPA (
     FOREIGN KEY (ID_estado) REFERENCES Estado(ID_estado)
 );
 GO
+
+
+-- ÍNDICES
+CREATE NONCLUSTERED INDEX idx_estado ON Proyecto(ID_estado);
+CREATE NONCLUSTERED INDEX idx_usuario ON Reporte(ID_usuario);
+
+GO
+
+-- PROCEDIMIENTOS ALMACENADOS
+CREATE PROCEDURE sp_AgregarUsuarioConRol
+    @Identificacion NVARCHAR(20),
+    @Nombre NVARCHAR(50),
+    @Apellido NVARCHAR(100),
+    @Correo NVARCHAR(150),
+    @ID_rol INT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    BEGIN TRANSACTION;
+    BEGIN TRY
+        INSERT INTO Usuarios (Identificacion, Nombre, Apellido, Correo)
+        VALUES (@Identificacion, @Nombre, @Apellido, @Correo);
+        
+        DECLARE @ID_usuario INT = SCOPE_IDENTITY();
+        INSERT INTO Usuario_Roles (ID_usuario, ID_rol)
+        VALUES (@ID_usuario, @ID_rol);
+        
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH;
+END;
+GO
+
+-- DATOS INICIALES
+INSERT INTO Estado (Nombre_estado, Descripcion_estado) 
+VALUES ('Activo', 'Estado activo'), ('Inactivo', 'Estado inactivo');
+
+INSERT INTO Rol (Nombre_rol, Descripcion_rol) 
+VALUES ('Administrador', 'Rol con acceso total'), ('Usuario', 'Rol estándar');
+
+INSERT INTO Metodo_Pago (Nombre_metodo, Descripcion_metodo) 
+VALUES ('Tarjeta de Crédito', 'Pago con tarjeta de crédito'), ('Transferencia Bancaria', 'Pago por transferencia');
+
+GO
+
+-- TRIGGERS
+CREATE TRIGGER trg_InsertarUsuarioRol
+ON Usuarios
+AFTER INSERT
+AS
+BEGIN
+    SET NOCOUNT ON;
+    -- Código de ejemplo para auditoría o lógica adicional
+END;
+GO
+
+-- VISTAS
+CREATE VIEW vw_ProyectosUsuarios
+AS
+SELECT 
+    p.ID_proyecto,
+    p.Nombre_proyecto,
+    p.Fecha_inicio,
+    p.Fecha_fin,
+    e.Nombre_estado,
+    u.Nombre + ' ' + u.Apellido AS Usuario_Asignado
+FROM Proyecto p
+JOIN Asignacion_Proyecto ap ON p.ID_proyecto = ap.ID_proyecto
+JOIN Usuarios u ON ap.ID_usuario = u.ID_usuario
+JOIN Estado e ON p.ID_estado = e.ID_estado;
