@@ -183,7 +183,13 @@ AFTER INSERT
 AS
 BEGIN
     SET NOCOUNT ON;
-    -- Código de ejemplo para auditoría o lógica adicional
+
+    INSERT INTO AuditoriaUsuarios (ID_usuario, Evento, Detalle)
+    SELECT 
+        ID_usuario,
+        'INSERT',
+        CONCAT('Usuario insertado con correo: ', Correo)
+    FROM INSERTED;
 END;
 GO
 
