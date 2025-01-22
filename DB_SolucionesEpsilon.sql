@@ -20,6 +20,7 @@ CREATE TABLE Usuarios (
     Nombre NVARCHAR(50) NOT NULL,
     Apellido NVARCHAR(100) NOT NULL,
     Correo NVARCHAR(150) NOT NULL UNIQUE,
+    Contrasenna NVARCHAR(250) NOT NULL,
     Fecha_creacion DATETIME DEFAULT GETDATE()
 );
 
@@ -139,7 +140,6 @@ CREATE TABLE AuditoriaUsuarios (
 );
 GO
 
-
 -- ÍNDICES
 CREATE NONCLUSTERED INDEX idx_estado ON Proyecto(ID_estado);
 CREATE NONCLUSTERED INDEX idx_usuario ON Reporte(ID_usuario);
@@ -173,6 +173,64 @@ BEGIN
     END CATCH;
 END;
 GO
+
+--Registrar Usuario
+CREATE PROCEDURE sp_RegistrarUsuario
+    @Nombre NVARCHAR(50),
+    @Apellido NVARCHAR(100),
+    @Correo NVARCHAR(150),
+    @Contrasenna NVARCHAR(255), 
+    @Fecha_creacion DATETIME
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Verificar si el correo o identificación ya existen
+    IF EXISTS (SELECT 1 FROM Usuarios WHERE Correo = @Correo)
+    BEGIN
+        RAISERROR('El correo ya está registrado.', 16, 1);
+        RETURN -1;
+    END
+    ELSE
+    BEGIN
+    -- Insertar al nuevo usuario con la contraseña encriptada
+    INSERT INTO Usuarios ( Nombre, Apellido, Correo, Contrasenna, Fecha_creacion)
+    VALUES (@Nombre, @Apellido, @Correo, @Contrasenna, GETDATE());
+    RETURN 1;
+    END
+END;
+
+--Login
+CREATE PROCEDURE sp_Login
+    @Correo NVARCHAR(150),
+    @Contrasenna NVARCHAR(255)
+AS
+BEGIN
+    SET NOCOUNT ON;
+    SELECT ID_usuario, Nombre, Correo, Contrasenna, Fecha_creacion
+    FROM Usuarios
+        WHERE Correo = @Correo;
+END;
+--Consultar todos usuarios
+CREATE PROCEDURE [dbo].[sp_ConsultarUsuarios]
+AS
+BEGIN
+    SELECT * FROM Usuarios;
+END
+--Consultar usuario por ID
+CREATE PROCEDURE [dbo].[sp_GetUserById]
+    @Id INT
+AS
+BEGIN
+    SELECT * FROM Usuarios WHERE ID_usuario = @Id;
+END
+-- Eliminar Usuario
+CREATE PROCEDURE [dbo].[sp_EliminarUsuario]
+    @Id INT
+AS
+BEGIN
+    DELETE FROM Usuarios WHERE ID_usuario = @Id;
+END
 
 -- DATOS INICIALES
 INSERT INTO Estado (Nombre_estado, Descripcion_estado) 
@@ -214,6 +272,12 @@ SELECT
     e.Nombre_estado,
     u.Nombre + ' ' + u.Apellido AS Usuario_Asignado
 FROM Proyecto p
-JOIN Asignacion_Proyecto ap ON p.ID_proyecto = ap.ID_proyecto
-JOIN Usuarios u ON ap.ID_usuario = u.ID_usuario
+LEFT JOIN Asignacion_Proyecto ap ON p.ID_proyecto = ap.ID_proyecto --en caso de que haya proyectos sin asignación de usuarios
+LEFT JOIN Usuarios u ON ap.ID_usuario = u.ID_usuario --en caso de que haya proyectos sin asignación de usuarios
 JOIN Estado e ON p.ID_estado = e.ID_estado;
+
+--Vista de usuarios
+CREATE VIEW vw_Usuarios
+AS
+SELECT ID_usuario, Identificacion, Nombre, Apellido, Correo, Fecha_creacion
+FROM Usuarios
