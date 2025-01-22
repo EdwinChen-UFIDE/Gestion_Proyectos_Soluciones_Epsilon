@@ -129,6 +129,16 @@ CREATE TABLE RPA (
 );
 GO
 
+-- Tabla Auditoria de Usuarios
+CREATE TABLE AuditoriaUsuarios (
+    ID_auditoria INT IDENTITY(1,1) PRIMARY KEY,
+    ID_usuario INT NOT NULL,
+    Fecha_evento DATETIME DEFAULT GETDATE(),
+    Evento NVARCHAR(50) NOT NULL,
+    Detalle NVARCHAR(250)
+);
+GO
+
 
 -- ÍNDICES
 CREATE NONCLUSTERED INDEX idx_estado ON Proyecto(ID_estado);
