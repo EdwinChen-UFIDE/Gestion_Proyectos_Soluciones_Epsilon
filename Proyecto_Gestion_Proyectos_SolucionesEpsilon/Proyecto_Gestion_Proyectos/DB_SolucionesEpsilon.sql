@@ -1,94 +1,98 @@
+
 -- Crear la base de datos
-CREATE DATABASE IF NOT EXISTS SolucionesEpsilon;
+CREATE DATABASE SolucionesEpsilon;
+GO
+
 USE SolucionesEpsilon;
+GO
 
 -- Tabla Estado
 CREATE TABLE Estado (
-    ID_estado INT AUTO_INCREMENT PRIMARY KEY,
-    Nombre_estado VARCHAR(50) NOT NULL UNIQUE,
-    Descripcion_estado VARCHAR(250)
-) ENGINE=InnoDB;
+    ID_estado INT IDENTITY(1,1) PRIMARY KEY,
+    Nombre_estado NVARCHAR(50) NOT NULL UNIQUE, -- UNIQUE para evitar nombres duplicados
+    Descripcion_estado NVARCHAR(250)
+);
 
 -- Tabla Usuarios
 CREATE TABLE Usuarios (
-    ID_usuario INT AUTO_INCREMENT PRIMARY KEY,
-    Identificacion VARCHAR(20) NOT NULL UNIQUE,
-    Nombre VARCHAR(50) NOT NULL,
-    Apellido VARCHAR(100) NOT NULL,
-    Correo VARCHAR(150) NOT NULL UNIQUE,
-    Contrasenna VARCHAR(250) NOT NULL,
-    Fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP
-) ENGINE=InnoDB;
+    ID_usuario INT IDENTITY(1,1) PRIMARY KEY,
+    Identificacion NVARCHAR(20) NOT NULL UNIQUE,
+    Nombre NVARCHAR(50) NOT NULL,
+    Apellido NVARCHAR(100) NOT NULL,
+    Correo NVARCHAR(150) NOT NULL UNIQUE,
+    Contrasenna NVARCHAR(250) NOT NULL,
+    Fecha_creacion DATETIME DEFAULT GETDATE()
+);
 
 -- Tabla Rol
 CREATE TABLE Rol (
-    ID_rol INT AUTO_INCREMENT PRIMARY KEY,
-    Nombre_rol VARCHAR(50) NOT NULL UNIQUE,
-    Descripcion_rol VARCHAR(250)
-) ENGINE=InnoDB;
+    ID_rol INT IDENTITY(1,1) PRIMARY KEY,
+    Nombre_rol NVARCHAR(50) NOT NULL UNIQUE, -- UNIQUE para evitar roles duplicados
+    Descripcion_rol NVARCHAR(250)
+);
 
 -- Tabla Usuario_Roles
 CREATE TABLE Usuario_Roles (
     ID_usuario INT NOT NULL,
     ID_rol INT NOT NULL,
-    Fecha_asignacion DATETIME DEFAULT CURRENT_TIMESTAMP,
+    Fecha_asignacion DATETIME DEFAULT GETDATE(),
     PRIMARY KEY (ID_usuario, ID_rol),
     FOREIGN KEY (ID_usuario) REFERENCES Usuarios(ID_usuario) ON DELETE CASCADE,
     FOREIGN KEY (ID_rol) REFERENCES Rol(ID_rol) ON DELETE CASCADE
-) ENGINE=InnoDB;
+);
 
 -- Tabla Proyecto
 CREATE TABLE Proyecto (
-    ID_proyecto INT AUTO_INCREMENT PRIMARY KEY,
-    Nombre_proyecto VARCHAR(150) NOT NULL UNIQUE,
+    ID_proyecto INT IDENTITY(1,1) PRIMARY KEY,
+    Nombre_proyecto NVARCHAR(150) NOT NULL UNIQUE, -- UNIQUE para proyectos únicos
     Fecha_inicio DATE,
     Fecha_fin DATE,
-    Presupuesto_total DECIMAL(12, 2) CHECK (Presupuesto_total >= 0),
-    Descripcion VARCHAR(500),
-    Prioridad INT NOT NULL CHECK (Prioridad BETWEEN 1 AND 5),
+    Presupuesto_total DECIMAL(12, 2) CHECK (Presupuesto_total >= 0), -- Validación positiva
+    Descripcion NVARCHAR(500),
+    Prioridad INT NOT NULL CHECK (Prioridad BETWEEN 1 AND 5), -- Validación de rango
     ID_estado INT NOT NULL,
     FOREIGN KEY (ID_estado) REFERENCES Estado(ID_estado)
-) ENGINE=InnoDB;
+);
 
 -- Tabla Asignacion_Proyecto
 CREATE TABLE Asignacion_Proyecto (
-    ID_asignacion INT AUTO_INCREMENT PRIMARY KEY,
+    ID_asignacion INT IDENTITY(1,1) PRIMARY KEY,
     ID_usuario INT NOT NULL,
     ID_proyecto INT NOT NULL,
     ID_rol INT NOT NULL,
-    Fecha_asignacion DATETIME DEFAULT CURRENT_TIMESTAMP,
+    Fecha_asignacion DATETIME DEFAULT GETDATE(),
     ID_estado INT NOT NULL,
     FOREIGN KEY (ID_usuario) REFERENCES Usuarios(ID_usuario) ON DELETE CASCADE,
     FOREIGN KEY (ID_proyecto) REFERENCES Proyecto(ID_proyecto) ON DELETE CASCADE,
     FOREIGN KEY (ID_rol) REFERENCES Rol(ID_rol),
     FOREIGN KEY (ID_estado) REFERENCES Estado(ID_estado)
-) ENGINE=InnoDB;
+);
 
 -- Tabla Reporte
 CREATE TABLE Reporte (
-    ID_reporte INT AUTO_INCREMENT PRIMARY KEY,
-    Tipo_reporte VARCHAR(50) NOT NULL,
-    Nombre VARCHAR(150) NOT NULL,
-    Descripcion VARCHAR(250),
-    Fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP,
+    ID_reporte INT IDENTITY(1,1) PRIMARY KEY,
+    Tipo_reporte NVARCHAR(50) NOT NULL,
+    Nombre NVARCHAR(150) NOT NULL,
+    Descripcion NVARCHAR(250),
+    Fecha_creacion DATETIME DEFAULT GETDATE(),
     ID_usuario INT NOT NULL,
     ID_proyecto INT NOT NULL,
     FOREIGN KEY (ID_usuario) REFERENCES Usuarios(ID_usuario) ON DELETE CASCADE,
     FOREIGN KEY (ID_proyecto) REFERENCES Proyecto(ID_proyecto) ON DELETE CASCADE
-) ENGINE=InnoDB;
+);
 
 -- Tabla Metodo_Pago
 CREATE TABLE Metodo_Pago (
-    ID_metodo_pago INT AUTO_INCREMENT PRIMARY KEY,
-    Nombre_metodo VARCHAR(50) NOT NULL UNIQUE,
-    Descripcion_metodo VARCHAR(250)
-) ENGINE=InnoDB;
+    ID_metodo_pago INT IDENTITY(1,1) PRIMARY KEY,
+    Nombre_metodo NVARCHAR(50) NOT NULL UNIQUE, -- UNIQUE para evitar métodos repetidos
+    Descripcion_metodo NVARCHAR(250)
+);
 
 -- Tabla Contabilidad
 CREATE TABLE Contabilidad (
-    ID_transaccion INT AUTO_INCREMENT PRIMARY KEY,
-    Monto DECIMAL(12, 2) NOT NULL CHECK (Monto >= 0),
-    Fecha_transaccion DATETIME DEFAULT CURRENT_TIMESTAMP,
+    ID_transaccion INT IDENTITY(1,1) PRIMARY KEY,
+    Monto DECIMAL(12, 2) NOT NULL CHECK (Monto >= 0), -- Validación positiva
+    Fecha_transaccion DATETIME DEFAULT GETDATE(),
     ID_proyecto INT NOT NULL,
     ID_usuario INT NOT NULL,
     ID_metodo_pago INT NOT NULL,
@@ -97,157 +101,136 @@ CREATE TABLE Contabilidad (
     FOREIGN KEY (ID_usuario) REFERENCES Usuarios(ID_usuario) ON DELETE CASCADE,
     FOREIGN KEY (ID_metodo_pago) REFERENCES Metodo_Pago(ID_metodo_pago),
     FOREIGN KEY (ID_estado) REFERENCES Estado(ID_estado)
-) ENGINE=InnoDB;
+);
 
 -- Tabla Plantilla
 CREATE TABLE Plantilla (
-    ID_plantilla INT AUTO_INCREMENT PRIMARY KEY,
-    Nombre_plantilla VARCHAR(150) NOT NULL UNIQUE,
-    Fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP,
+    ID_plantilla INT IDENTITY(1,1) PRIMARY KEY,
+    Nombre_plantilla NVARCHAR(150) NOT NULL UNIQUE, -- UNIQUE para nombres únicos
+    Fecha_creacion DATETIME DEFAULT GETDATE(),
     Es_Publico BIT DEFAULT 0,
     ID_usuario INT NOT NULL,
     ID_estado INT NOT NULL,
     FOREIGN KEY (ID_usuario) REFERENCES Usuarios(ID_usuario) ON DELETE CASCADE,
     FOREIGN KEY (ID_estado) REFERENCES Estado(ID_estado)
-) ENGINE=InnoDB;
+);
 
 -- Tabla RPA
 CREATE TABLE RPA (
-    ID_rpa INT AUTO_INCREMENT PRIMARY KEY,
-    Nombre_proceso VARCHAR(150) NOT NULL UNIQUE,
+    ID_rpa INT IDENTITY(1,1) PRIMARY KEY,
+    Nombre_proceso NVARCHAR(150) NOT NULL UNIQUE, -- UNIQUE para evitar procesos duplicados
     Estado BIT DEFAULT 0,
     Fecha_inicio DATETIME,
     Fecha_fin DATETIME,
     ID_usuario INT NOT NULL,
     ID_estado INT NOT NULL,
-    Version VARCHAR(20),
+    Version NVARCHAR(20),
     FOREIGN KEY (ID_usuario) REFERENCES Usuarios(ID_usuario) ON DELETE CASCADE,
     FOREIGN KEY (ID_estado) REFERENCES Estado(ID_estado)
-) ENGINE=InnoDB;
+);
+GO
 
 -- Tabla Auditoria de Usuarios
 CREATE TABLE AuditoriaUsuarios (
-    ID_auditoria INT AUTO_INCREMENT PRIMARY KEY,
+    ID_auditoria INT IDENTITY(1,1) PRIMARY KEY,
     ID_usuario INT NOT NULL,
-    Fecha_evento DATETIME DEFAULT CURRENT_TIMESTAMP,
-    Evento VARCHAR(50) NOT NULL,
-    Detalle VARCHAR(250)
-) ENGINE=InnoDB;
+    Fecha_evento DATETIME DEFAULT GETDATE(),
+    Evento NVARCHAR(50) NOT NULL,
+    Detalle NVARCHAR(250)
+);
+GO
 
 -- ÍNDICES
-CREATE INDEX idx_estado ON Proyecto(ID_estado);
-CREATE INDEX idx_usuario ON Reporte(ID_usuario);
+CREATE NONCLUSTERED INDEX idx_estado ON Proyecto(ID_estado);
+CREATE NONCLUSTERED INDEX idx_usuario ON Reporte(ID_usuario);
+
+GO
 
 -- PROCEDIMIENTOS ALMACENADOS
-DELIMITER $$
-
-CREATE PROCEDURE sp_AgregarUsuarioConRol(
-    IN p_Identificacion VARCHAR(20),
-    IN p_Nombre VARCHAR(50),
-    IN p_Apellido VARCHAR(100),
-    IN p_Correo VARCHAR(150),
-    IN p_ID_rol INT
-)
+CREATE PROCEDURE sp_AgregarUsuarioConRol
+    @Identificacion NVARCHAR(20),
+    @Nombre NVARCHAR(50),
+    @Apellido NVARCHAR(100),
+    @Correo NVARCHAR(150),
+    @ID_rol INT
+AS
 BEGIN
-    DECLARE EXIT HANDLER FOR SQLEXCEPTION
-    BEGIN
-        ROLLBACK;
-        RESIGNAL;
-    END;
+    SET NOCOUNT ON;
+    BEGIN TRANSACTION;
+    BEGIN TRY
+        INSERT INTO Usuarios (Identificacion, Nombre, Apellido, Correo)
+        VALUES (@Identificacion, @Nombre, @Apellido, @Correo);
+        
+        DECLARE @ID_usuario INT = SCOPE_IDENTITY();
+        INSERT INTO Usuario_Roles (ID_usuario, ID_rol)
+        VALUES (@ID_usuario, @ID_rol);
+        
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH;
+END;
+GO
 
-    START TRANSACTION;
-    
-    INSERT INTO Usuarios (Identificacion, Nombre, Apellido, Correo)
-    VALUES (p_Identificacion, p_Nombre, p_Apellido, p_Correo);
-    
-    SET @ID_usuario = LAST_INSERT_ID();
-    
-    INSERT INTO Usuario_Roles (ID_usuario, ID_rol)
-    VALUES (@ID_usuario, p_ID_rol);
-    
-    COMMIT;
-END$$
-
-CREATE PROCEDURE sp_RegistrarUsuario(
-    IN p_Nombre VARCHAR(50),
-    IN p_Apellido VARCHAR(100),
-    IN p_Correo VARCHAR(150),
-    IN p_Contrasenna VARCHAR(255),
-    IN p_Fecha_creacion DATETIME
-)
+--Registrar Usuario
+CREATE PROCEDURE sp_RegistrarUsuario
+    @Nombre NVARCHAR(50),
+    @Apellido NVARCHAR(100),
+    @Correo NVARCHAR(150),
+    @Contrasenna NVARCHAR(255), 
+    @Fecha_creacion DATETIME
+AS
 BEGIN
-    DECLARE EXIT HANDLER FOR SQLEXCEPTION
-    BEGIN
-        ROLLBACK;
-        RESIGNAL;
-    END;
+    SET NOCOUNT ON;
 
-    IF (SELECT COUNT(*) FROM Usuarios WHERE Correo = p_Correo) > 0 THEN
-        SIGNAL SQLSTATE '45000' -- Codigo de error genercio en caso de sucder--
-        SET MESSAGE_TEXT = 'El correo ya está registrado.';
+    -- Verificar si el correo o identificación ya existen
+    IF EXISTS (SELECT 1 FROM Usuarios WHERE Correo = @Correo)
+    BEGIN
+        RAISERROR('El correo ya está registrado.', 16, 1);
+        RETURN -1;
+    END
     ELSE
-        INSERT INTO Usuarios (Nombre, Apellido, Correo, Contrasenna, Fecha_creacion)
-        VALUES (p_Nombre, p_Apellido, p_Correo, p_Contrasenna, CURRENT_TIMESTAMP);
-    END IF;
-END$$
+    BEGIN
+    -- Insertar al nuevo usuario con la contraseña encriptada
+    INSERT INTO Usuarios ( Nombre, Apellido, Correo, Contrasenna, Fecha_creacion)
+    VALUES (@Nombre, @Apellido, @Correo, @Contrasenna, GETDATE());
+    RETURN 1;
+    END
+END;
 
-CREATE PROCEDURE sp_Login(
-    IN p_Correo VARCHAR(150),
-    IN p_Contrasenna VARCHAR(255)
-)
+--Login
+CREATE PROCEDURE sp_Login
+    @Correo NVARCHAR(150),
+    @Contrasenna NVARCHAR(255)
+AS
 BEGIN
+    SET NOCOUNT ON;
     SELECT ID_usuario, Nombre, Correo, Contrasenna, Fecha_creacion
     FROM Usuarios
-    WHERE Correo = p_Correo;
-END$$
-
-CREATE PROCEDURE sp_ConsultarUsuarios()
+        WHERE Correo = @Correo;
+END;
+--Consultar todos usuarios
+CREATE PROCEDURE [dbo].[sp_ConsultarUsuarios]
+AS
 BEGIN
     SELECT * FROM Usuarios;
-END$$
-
-CREATE PROCEDURE sp_GetUserById(IN p_Id INT)
+END
+--Consultar usuario por ID
+CREATE PROCEDURE [dbo].[sp_GetUserById]
+    @Id INT
+AS
 BEGIN
-    SELECT * FROM Usuarios WHERE ID_usuario = p_Id;
-END$$
-
-CREATE PROCEDURE sp_EliminarUsuario(IN p_Id INT)
+    SELECT * FROM Usuarios WHERE ID_usuario = @Id;
+END
+-- Eliminar Usuario
+CREATE PROCEDURE [dbo].[sp_EliminarUsuario]
+    @Id INT
+AS
 BEGIN
-    DELETE FROM Usuarios WHERE ID_usuario = p_Id;
-END$$
-
-DELIMITER ;
-
--- TRIGGERS
-DELIMITER $$
-
-CREATE TRIGGER trg_InsertarUsuarioRol
-AFTER INSERT ON Usuarios
-FOR EACH ROW
-BEGIN
-    INSERT INTO AuditoriaUsuarios (ID_usuario, Evento, Detalle)
-    VALUES (NEW.ID_usuario, 'INSERT', CONCAT('Usuario insertado con correo: ', NEW.Correo));
-END$$
-
-DELIMITER ;
-
--- VISTAS
-CREATE VIEW vw_ProyectosUsuarios AS
-SELECT 
-    p.ID_proyecto,
-    p.Nombre_proyecto,
-    p.Fecha_inicio,
-    p.Fecha_fin,
-    e.Nombre_estado,
-    CONCAT(u.Nombre, ' ', u.Apellido) AS Usuario_Asignado
-FROM Proyecto p
-LEFT JOIN Asignacion_Proyecto ap ON p.ID_proyecto = ap.ID_proyecto
-LEFT JOIN Usuarios u ON ap.ID_usuario = u.ID_usuario
-JOIN Estado e ON p.ID_estado = e.ID_estado;
-
-CREATE VIEW vw_Usuarios AS
-SELECT ID_usuario, Identificacion, Nombre, Apellido, Correo, Fecha_creacion
-FROM Usuarios;
+    DELETE FROM Usuarios WHERE ID_usuario = @Id;
+END
 
 -- DATOS INICIALES
 INSERT INTO Estado (Nombre_estado, Descripcion_estado) 
@@ -258,3 +241,87 @@ VALUES ('Administrador', 'Rol con acceso total'), ('Usuario', 'Rol estándar');
 
 INSERT INTO Metodo_Pago (Nombre_metodo, Descripcion_metodo) 
 VALUES ('Tarjeta de Crédito', 'Pago con tarjeta de crédito'), ('Transferencia Bancaria', 'Pago por transferencia');
+
+GO
+
+-- TRIGGERS
+CREATE TRIGGER trg_InsertarUsuarioRol
+ON Usuarios
+AFTER INSERT
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    INSERT INTO AuditoriaUsuarios (ID_usuario, Evento, Detalle)
+    SELECT 
+        ID_usuario,
+        'INSERT',
+        CONCAT('Usuario insertado con correo: ', Correo)
+    FROM INSERTED;
+END;
+GO
+
+-- VISTAS
+CREATE VIEW vw_ProyectosUsuarios
+AS
+SELECT 
+    p.ID_proyecto,
+    p.Nombre_proyecto,
+    p.Fecha_inicio,
+    p.Fecha_fin,
+    e.Nombre_estado,
+    u.Nombre + ' ' + u.Apellido AS Usuario_Asignado
+FROM Proyecto p
+LEFT JOIN Asignacion_Proyecto ap ON p.ID_proyecto = ap.ID_proyecto --en caso de que haya proyectos sin asignación de usuarios
+LEFT JOIN Usuarios u ON ap.ID_usuario = u.ID_usuario --en caso de que haya proyectos sin asignación de usuarios
+JOIN Estado e ON p.ID_estado = e.ID_estado;
+
+--Vista de usuarios
+CREATE VIEW vw_Usuarios
+AS
+SELECT ID_usuario, Identificacion, Nombre, Apellido, Correo, Fecha_creacion
+FROM Usuarios
+
+
+
+
+
+
+-- Crear base de datos
+CREATE DATABASE IF NOT EXISTS soluciones_epsilon;
+USE soluciones_epsilon;
+
+-- Crear tabla de roles
+CREATE TABLE IF NOT EXISTS roles (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL UNIQUE
+);
+
+-- Insertar roles predefinidos
+INSERT IGNORE INTO roles (nombre) VALUES
+('admin'),
+('user');
+
+-- Crear tabla de usuarios
+CREATE TABLE IF NOT EXISTS usuarios (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    role_id INT NOT NULL,
+    creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (role_id) REFERENCES roles(id) ON DELETE CASCADE
+);
+
+-- Crear tabla para el historial de sesiones
+CREATE TABLE IF NOT EXISTS historial_sesiones (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    usuario_id INT NOT NULL,
+    ip_address VARCHAR(45) NOT NULL,
+    navegador VARCHAR(255) NOT NULL,
+    inicio_sesion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+);
+
+-- Insertar usuario administrador por defecto
+INSERT IGNORE INTO usuarios (email, password, role_id) VALUES
+('admin@example.com', PASSWORD('Admin@123'), 1); -- Contraseña: Admin@123
