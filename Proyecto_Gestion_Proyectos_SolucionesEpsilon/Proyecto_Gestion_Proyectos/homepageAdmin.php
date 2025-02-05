@@ -8,7 +8,19 @@ if (isset($_SESSION['role_id']) && $_SESSION['role_id'] == 8) { // Rol de admin 
     echo '<a href="listar_empleados.php" style="padding: 10px 15px; background-color: #4CAF50; color: white; text-decoration: none; border-radius: 5px;">Ver Empleados Actuales</a>';
     echo '<a href="Roles.php" style="padding: 10px 15px; background-color:rgb(76, 175, 158); color: white; text-decoration: none; border-radius: 5px; margin-right: 10px;">Registrar Rol</a>';
     echo '<a href="Roles.php" style="padding: 10px 15px; background-color:rgb(76, 175, 158); color: white; text-decoration: none; border-radius: 5px;">Listar Roles</a>';
+    
 } else {
     echo '<p>No tienes permisos para registrar empleados.</p>';
 }
 ?>
+
+<a href="registrarEmpleados.php" style="
+        display: inline-block;
+        background-color:rgb(76, 78, 175);
+        color: white;
+        padding: 10px 20px;
+        text-decoration: none;
+        border-radius: 5px;
+        font-size: 16px;
+    ">Registrar Empleado</a>
+</div>

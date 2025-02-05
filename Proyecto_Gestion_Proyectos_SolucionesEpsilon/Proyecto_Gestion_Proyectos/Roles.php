@@ -12,7 +12,13 @@ try {
 
 // Funciones para la gestión de roles
 function listarRoles($pdo) {
-    $stmt = $pdo->query("SELECT * FROM roles");
+    $sql = "
+        SELECT r.id, r.nombre, COUNT(e.id) AS num_empleados
+        FROM roles r
+        LEFT JOIN empleados e ON r.id = e.role_id
+        GROUP BY r.id, r.nombre
+    ";
+    $stmt = $pdo->query($sql);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
@@ -31,8 +37,6 @@ function actualizarRol($pdo, $id, $nombre) {
     $stmt = $pdo->prepare("UPDATE roles SET nombre = :nombre WHERE id = :id");
     $stmt->execute(['nombre' => $nombre, 'id' => $id]);
 }
-
-
 ?>
 
 <!DOCTYPE html>
@@ -55,6 +59,7 @@ function actualizarRol($pdo, $id, $nombre) {
         <tr>
             <th>ID</th>
             <th>Nombre</th>
+            <th>Número de Empleados</th>
             <th>Acciones</th>
         </tr>
         <?php
@@ -63,6 +68,7 @@ function actualizarRol($pdo, $id, $nombre) {
             echo "<tr>";
             echo "<td>{$rol['id']}</td>";
             echo "<td>{$rol['nombre']}</td>";
+            echo "<td>{$rol['num_empleados']}</td>";
             echo "<td>
                 <a href='editar_rol.php?id={$rol['id']}'>Editar</a> |
                 <a href='eliminarRol.php?id={$rol['id']}' onclick='return confirm(\"¿Estás seguro de eliminar este rol?\")'>Eliminar</a>
