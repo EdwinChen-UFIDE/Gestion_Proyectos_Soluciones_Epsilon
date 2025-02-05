@@ -38,15 +38,18 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 <head>
     <meta charset="UTF-8">
     <title>Editar Rol</title>
+    <link rel="stylesheet" href="../CSS/estilos.css"> 
 </head>
 <body>
-    <h1>Editar Rol</h1>
-    <form action="procesar_editar_rol.php" method="POST">
-        <input type="hidden" name="id" value="<?php echo $rol['id']; ?>">
-        <label for="nombre">Nombre del Rol:</label>
-        <input type="text" id="nombre" name="nombre" value="<?php echo htmlspecialchars($rol['nombre']); ?>" required>
-        <br><br>
-        <button type="submit">Guardar Cambios</button>
-    </form>
+    <div class="form-container"> 
+        <h1>Editar Rol</h1>
+        <form action="procesar_editar_rol.php" method="POST">
+            <input type="hidden" name="id" value="<?php echo $rol['id']; ?>">
+            <label for="nombre">Nombre del Rol:</label>
+            <input type="text" id="nombre" name="nombre" value="<?php echo htmlspecialchars($rol['nombre']); ?>" required>
+            <br><br>
+            <button type="submit">Guardar Cambios</button>
+        </form>
+    </div>
 </body>
 </html>

@@ -1,8 +1,8 @@
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <?php
-// Incluye la configuración de la base de datos
 require_once 'db_config.php';
+session_start();
 
-// Conexión a la base de datos
 try {
     $pdo = new PDO("mysql:host=$db_host;dbname=$db_name", $db_user, $db_pass);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -10,36 +10,36 @@ try {
     die("Error de conexión a la base de datos: " . $e->getMessage());
 }
 
-// Procesar el formulario de registro
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $email = trim($_POST['email']);
     $password = trim($_POST['password']);
-    $role_id = 2; // Por defecto, asignamos el rol "user"
+    $role_id = 2;
 
-    // Validaciones básicas
     if (empty($email) || empty($password)) {
-        echo "Por favor, completa todos los campos.";
-        exit;
+        $_SESSION['mensaje'] = "Por favor, completa todos los campos.";
+        $_SESSION['mensaje_tipo'] = "error";
+        header("Location: register.php");
+        exit();
     }
 
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        echo "El formato del correo electrónico no es válido.";
-        exit;
+        $_SESSION['mensaje'] = "El formato del correo electrónico no es válido.";
+        $_SESSION['mensaje_tipo'] = "error";
+        header("Location: register.php");
+        exit();
     }
 
     try {
-        // Verificar si el correo ya está registrado
         $stmt = $pdo->prepare("SELECT id FROM usuarios WHERE email = :email");
         $stmt->execute(['email' => $email]);
         if ($stmt->rowCount() > 0) {
-            echo "Este correo electrónico ya está registrado.";
-            exit;
+            $_SESSION['mensaje'] = "Este correo electrónico ya está registrado.";
+            $_SESSION['mensaje_tipo'] = "error";
+            header("Location: register.php");
+            exit();
         }
 
-        // Cifrar la contraseña
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-
-        // Insertar el usuario en la base de datos
         $stmt = $pdo->prepare("INSERT INTO usuarios (email, password, role_id) VALUES (:email, :password, :role_id)");
         $stmt->execute([
             'email' => $email,
@@ -47,9 +47,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'role_id' => $role_id
         ]);
 
-        echo "Registro exitoso. Ahora puedes iniciar sesión.";
+        $_SESSION['mensaje'] = "¡Registro exitoso!";
+        $_SESSION['mensaje_tipo'] = "success";
+        header("Location: register.php");
+        exit();
     } catch (PDOException $e) {
-        echo "Error al registrar el usuario: " . $e->getMessage();
+        $_SESSION['mensaje'] = "Error al registrar el usuario: " . $e->getMessage();
+        $_SESSION['mensaje_tipo'] = "error";
+        header("Location: register.php");
+        exit();
     }
 }
 ?>
@@ -60,17 +66,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro</title>
+    <link rel="stylesheet" href="../CSS/estilos.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
-    <h2>Registro de Usuario</h2>
-    <form method="POST" action="">
-        <label for="email">Correo Electrónico:</label><br>
-        <input type="email" id="email" name="email" required><br><br>
+    <div class="form-container">
+        <h2>Registro de Usuario</h2>
 
-        <label for="password">Contraseña:</label><br>
-        <input type="password" id="password" name="password" required><br><br>
+        <form method="POST" action="register.php">
+            <label for="email">Correo Electrónico:</label>
+            <input type="email" id="email" name="email" required>
 
-        <button type="submit">Registrar</button>
-    </form>
+            <label for="password">Contraseña:</label>
+            <input type="password" id="password" name="password" required>
+
+            <button type="submit">Registrar</button>
+        </form>
+    </div>
+
+    <!-- Mostrar SweetAlert -->
+    <?php if (isset($_SESSION['mensaje'])): ?>
+        <script>
+            Swal.fire({
+                title: '<?= $_SESSION['mensaje_tipo'] === "success" ? "¡Éxito!" : "¡Error!" ?>',
+                text: '<?= $_SESSION['mensaje'] ?>',
+                icon: '<?= $_SESSION['mensaje_tipo'] ?>',
+                confirmButtonText: 'Aceptar'
+            }).then(() => {
+                <?php if ($_SESSION['mensaje_tipo'] === "success"): ?>
+                    window.location = "login.php";
+                <?php endif; ?>
+            });
+        </script>
+        <?php unset($_SESSION['mensaje'], $_SESSION['mensaje_tipo']); ?>
+    <?php endif; ?>
 </body>
 </html>

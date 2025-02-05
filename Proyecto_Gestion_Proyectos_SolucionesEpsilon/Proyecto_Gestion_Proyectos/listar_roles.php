@@ -38,18 +38,18 @@ try {
             text-align: left;
         }
         th {
-            background-color: #4CAF50;
+            background-color: #084A77;
             color: white;
         }
         a {
             padding: 6px 12px;
-            background-color: #4CAF50;
+            background-color: #084A77;
             color: white;
             text-decoration: none;
             border-radius: 5px;
         }
         a:hover {
-            background-color: #45a049;
+            background-color: #084A77;
         }
     </style>
 </head>

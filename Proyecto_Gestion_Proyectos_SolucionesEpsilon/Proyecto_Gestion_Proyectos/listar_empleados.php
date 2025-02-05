@@ -21,37 +21,42 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Empleados</title>
+    <link rel="stylesheet" href="../CSS/estilos.css"> 
 </head>
 <body>
-    <h2>Lista de Empleados</h2>
-    <table border="1">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nombre</th>
-                <th>Apellidos</th>
-                <th>Cédula</th>
-                <th>Correo Electrónico</th>
-                <th>Rol</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php foreach ($empleados as $empleado): ?>
-                <tr>
-                    <td><?= htmlspecialchars($empleado['id']); ?></td>
-                    <td><?= htmlspecialchars($empleado['nombre']); ?></td>
-                    <td><?= htmlspecialchars($empleado['apellidos']); ?></td>
-                    <td><?= htmlspecialchars($empleado['cedula']); ?></td>
-                    <td><?= htmlspecialchars($empleado['email']); ?></td>
-                    <td><?= htmlspecialchars($empleado['rol']); ?></td>
-                    <td>
-                        <a href="editar_empleado.php?id=<?= $empleado['id']; ?>">Editar</a>
-                        <a href="eliminar_empleado.php?id=<?= $empleado['id']; ?>" onclick="return confirm('¿Está seguro de que desea eliminar este empleado?');">Eliminar</a>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-        </tbody>
-    </table>
+    <div class="main-container">
+        <div class="list-container">
+            <h2>Lista de Empleados</h2>
+            <table class="tablaempleados">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nombre</th>
+                        <th>Apellidos</th>
+                        <th>Cédula</th>
+                        <th>Correo Electrónico</th>
+                        <th>Rol</th>
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php foreach ($empleados as $empleado): ?>
+                        <tr>
+                            <td><?= htmlspecialchars($empleado['id']); ?></td>
+                            <td><?= htmlspecialchars($empleado['nombre']); ?></td>
+                            <td><?= htmlspecialchars($empleado['apellidos']); ?></td>
+                            <td><?= htmlspecialchars($empleado['cedula']); ?></td>
+                            <td><?= htmlspecialchars($empleado['email']); ?></td>
+                            <td><?= htmlspecialchars($empleado['rol']); ?></td>
+                            <td>
+                                <a href="editar_empleado.php?id=<?= $empleado['id']; ?>">Editar</a>
+                                <a href="eliminar_empleado.php?id=<?= $empleado['id']; ?>" onclick="return confirm('¿Está seguro de que desea eliminar este empleado?');">Eliminar</a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </body>
 </html>

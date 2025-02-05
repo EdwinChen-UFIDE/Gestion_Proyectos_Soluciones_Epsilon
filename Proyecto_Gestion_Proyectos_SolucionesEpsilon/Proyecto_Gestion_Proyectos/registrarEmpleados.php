@@ -26,42 +26,46 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrar Empleado</title>
+    <link rel="stylesheet" href="../CSS/estilos.css"> 
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&family=Roboto+Slab:wght@400&display=swap" rel="stylesheet"> 
 </head>
 <body>
-    <h2>Registrar Nuevo Empleado</h2>
-    <form method="POST" action="procesar_registro_empleado.php">
-        <label for="nombre">Nombre:</label><br>
-        <input type="text" id="nombre" name="nombre" required><br><br>
+    <div class="form-container"> 
+        <h2>Registrar Nuevo Empleado</h2>
+        <form method="POST" action="procesar_registro_empleado.php">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required>
 
-        <label for="apellidos">Apellidos:</label><br>
-        <input type="text" id="apellidos" name="apellidos" required><br><br>
+            <label for="apellidos">Apellidos:</label>
+            <input type="text" id="apellidos" name="apellidos" required>
 
-        <label for="fecha_nacimiento">Fecha de Nacimiento:</label><br>
-        <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" required><br><br>
+            <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
+            <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" required>
 
-        <label for="cedula">Cédula:</label><br>
-        <input type="text" id="cedula" name="cedula" required><br><br>
+            <label for="cedula">Cédula:</label>
+            <input type="text" id="cedula" name="cedula" required>
 
-        <label for="telefono">Número Telefónico:</label><br>
-        <input type="text" id="telefono" name="telefono" required><br><br>
+            <label for="telefono">Número Telefónico:</label>
+            <input type="text" id="telefono" name="telefono" required>
 
-        <label for="email">Correo Electrónico:</label><br>
-        <input type="email" id="email" name="email" required><br><br>
+            <label for="email">Correo Electrónico:</label>
+            <input type="email" id="email" name="email" required>
 
-        <label for="password">Contraseña:</label><br>
-        <input type="password" id="password" name="password" required><br><br>
+            <label for="password">Contraseña:</label>
+            <input type="password" id="password" name="password" required>
 
-        <label for="rol">Rol:</label><br>
-        <select id="rol" name="rol" required>
-            <option value="">Seleccione un rol</option>
-            <?php foreach ($roles as $rol): ?>
-                <option value="<?= htmlspecialchars($rol['id']); ?>">
-                    <?= htmlspecialchars($rol['nombre']); ?>
-                </option>
-            <?php endforeach; ?>
-        </select><br><br>
+            <label for="rol">Rol:</label>
+            <select id="rol" name="rol" required>
+                <option value="">Seleccione un rol</option>
+                <?php foreach ($roles as $rol): ?>
+                    <option value="<?= htmlspecialchars($rol['id']); ?>">
+                        <?= htmlspecialchars($rol['nombre']); ?>
+                    </option>
+                <?php endforeach; ?>
+            </select>
 
-        <button type="submit">Registrar Empleado</button>
-    </form>
+            <button type="submit">Registrar Empleado</button>
+        </form>
+    </div>
 </body>
 </html>

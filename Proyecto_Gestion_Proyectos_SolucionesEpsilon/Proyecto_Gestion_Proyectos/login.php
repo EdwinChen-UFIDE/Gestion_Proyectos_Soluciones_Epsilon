@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['role_id'] = $user['role_id'];
 
                 // Redirigir según el rol
-                if ($user['role_id'] == 1) { // Rol de admin con ID 8
+                if ($user['role_id'] == 1) { // Rol de admin con ID 1
                     echo "<script>alert('Inicio de sesión exitoso. Bienvenido, Admin.'); window.location.href = 'homepageAdmin.php';</script>";
                 } else {
                     echo "<script>alert('Inicio de sesión exitoso.'); window.location.href = 'HomePage.html';</script>";
@@ -60,18 +60,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar Sesión</title>
+    <link rel="stylesheet" href="../CSS/estilos.css"> <!-- Enlazar el CSS -->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&family=Roboto+Slab:wght@400&display=swap" rel="stylesheet"> <!-- Incluir la fuente -->
 </head>
 <body>
-    <h2>Iniciar Sesión</h2>
-    <form method="POST" action="">
-        <label for="email">Correo Electrónico:</label><br>
-        <input type="email" id="email" name="email" required><br><br>
+    <div class="form-container"> <!-- Contenedor del formulario -->
+        <h2>Iniciar Sesión</h2>
+        <form method="POST" action="">
+            <label for="email">Correo Electrónico:</label>
+            <input type="email" id="email" name="email" required>
 
-        <label for="password">Contraseña:</label><br>
-        <input type="password" id="password" name="password" required><br><br>
+            <label for="password">Contraseña:</label>
+            <input type="password" id="password" name="password" required>
 
-        <button type="submit">Iniciar Sesión</button> 
-        <a href='register.php'>Registrarse</a>
-    </form>
+            <button type="submit">Iniciar Sesión</button>
+            <a href='register.php'>Registrarse</a>
+        </form>
+    </div>
 </body>
 </html>

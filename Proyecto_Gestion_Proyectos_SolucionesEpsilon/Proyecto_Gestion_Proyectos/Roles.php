@@ -45,38 +45,46 @@ function actualizarRol($pdo, $id, $nombre) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Roles</title>
+    <link rel="stylesheet" href="../CSS/estilos.css">
+   
 </head>
 <body>
-    <h2>Registrar Nuevo Rol</h2>
-    <form method="POST" action="">
-        <label for="nombre">Nombre del Rol:</label><br>
-        <input type="text" id="nombre" name="nombre" required><br><br>
-        <button type="submit" name="registrar">Registrar Rol</button>
-    </form>
+    <div class="main-container">
+        <div class="form-container" id="registro-rol"> 
+            <h2>Registrar Nuevo Rol</h2>
+            <form method="POST" action="">
+                <label for="nombre">Nombre del Rol:</label>
+                <input type="text" id="nombre" name="nombre" required>
+                <button type="submit" name="registrar">Registrar Rol</button>
+            </form>
+        </div>
 
-    <h2>Lista de Roles</h2>
-    <table border="1">
-        <tr>
-            <th>ID</th>
-            <th>Nombre</th>
-            <th>Número de Empleados</th>
-            <th>Acciones</th>
-        </tr>
-        <?php
-        $roles = listarRoles($pdo);
-        foreach ($roles as $rol) {
-            echo "<tr>";
-            echo "<td>{$rol['id']}</td>";
-            echo "<td>{$rol['nombre']}</td>";
-            echo "<td>{$rol['num_empleados']}</td>";
-            echo "<td>
-                <a href='editar_rol.php?id={$rol['id']}'>Editar</a> |
-                <a href='eliminarRol.php?id={$rol['id']}' onclick='return confirm(\"¿Estás seguro de eliminar este rol?\")'>Eliminar</a>
-            </td>";
-            echo "</tr>";
-        }
-        ?>
-    </table>
+        <div class="form-container" id="registro-rol"> 
+            <h2>Lista de Roles</h2>
+            <table>
+                <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Número de Empleados</th>
+                    <th>Acciones</th>
+                </tr>
+                <?php
+                $roles = listarRoles($pdo);
+                foreach ($roles as $rol) {
+                    echo "<tr>";
+                    echo "<td>{$rol['id']}</td>";
+                    echo "<td>{$rol['nombre']}</td>";
+                    echo "<td>{$rol['num_empleados']}</td>";
+                    echo "<td>
+                        <a href='editar_rol.php?id={$rol['id']}'>Editar</a> |
+                        <a href='eliminarRol.php?id={$rol['id']}' onclick='return confirm(\"¿Estás seguro de eliminar este rol?\")'>Eliminar</a>
+                    </td>";
+                    echo "</tr>";
+                }
+                ?>
+            </table>
+        </div>
+    </div>
 
     <?php
     // Procesar registro de rol
@@ -84,7 +92,7 @@ function actualizarRol($pdo, $id, $nombre) {
         $nombre = $_POST['nombre'];
         registrarRol($pdo, $nombre);
         echo "<p>Rol registrado exitosamente.</p>";
-        header("Refresh:0"); // Recargar la página para actualizar la lista
+        header("Refresh:0"); 
     }
     ?>
 </body>
