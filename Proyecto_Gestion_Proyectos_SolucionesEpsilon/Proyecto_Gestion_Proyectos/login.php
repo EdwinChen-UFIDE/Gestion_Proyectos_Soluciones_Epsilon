@@ -37,7 +37,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['role_id'] = $user['role_id'];
 
                 // Redirigir según el rol
-                if ($user['role_id'] == 8) { // Rol de admin con ID 8
+                if ($user['role_id'] == 1) { // Rol de admin con ID 8
                     echo "<script>alert('Inicio de sesión exitoso. Bienvenido, Admin.'); window.location.href = 'homepageAdmin.php';</script>";
                 } else {
                     echo "<script>alert('Inicio de sesión exitoso.'); window.location.href = 'HomePage.html';</script>";
