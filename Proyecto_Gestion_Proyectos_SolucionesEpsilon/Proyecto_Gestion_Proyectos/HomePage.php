@@ -1,12 +1,6 @@
 <?php
 // Inicia sesión y verifica si el usuario está autenticado
 session_start();
-
-// Verifica si el usuario tiene el rol de admin
-if (!isset($_SESSION['role_id']) || $_SESSION['role_id'] != 1) {
-    echo '<p>No tienes permisos para acceder a esta página.</p>';
-    exit();
-}
 ?>
 
 <!DOCTYPE html>
@@ -27,8 +21,6 @@ if (!isset($_SESSION['role_id']) || $_SESSION['role_id'] != 1) {
             <a href="listar_empleados.php">Ver Empleados Actuales</a>
             <a href="Roles.php">Registrar Rol</a>
             <a href="Roles.php">Listar Roles</a>
-            <a href="registrar_evaluacion.php">Registrar Evaluacion</a>
-            <a href="listar_evaluaciones.php">Listar Evaluaciones</a>
         </aside>
 
         <main class="content">

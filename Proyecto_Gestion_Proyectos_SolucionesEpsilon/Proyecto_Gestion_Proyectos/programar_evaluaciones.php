@@ -30,7 +30,8 @@ $params = array(
 $stmt = sqlsrv_query($conn, $sql, $params);
 
 if($stmt) {
-    echo json_encode(['success' => 'Evaluación programada correctamente']);
+    header("Location: homepageAdmin.php");
+    exit;
 } else {
     http_response_code(500);
     echo json_encode(['error' => 'Error al programar: ' . print_r(sqlsrv_errors(), true)]);
