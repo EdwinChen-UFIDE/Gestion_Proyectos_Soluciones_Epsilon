@@ -34,14 +34,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 session_start();
                 $_SESSION['user_id'] = $user['id'];
                 $_SESSION['user_email'] = $user['email'];
-                $_SESSION['role_id'] = $user['role_id'];
+                $_SESSION['role_id'] = $user['role_id']; // Guardamos el rol para usarlo en la navbar
 
-                // Redirigir según el rol
-                if ($user['role_id'] == 1) { // Rol de admin con ID 1
-                    echo "<script>alert('Inicio de sesión exitoso. Bienvenido, Admin.'); window.location.href = 'homepageAdmin.php';</script>";
-                } else {
-                    echo "<script>alert('Inicio de sesión exitoso.'); window.location.href = 'HomePage.html';</script>";
-                }
+                // Redirigir a la misma página para todos los usuarios
+                echo "<script>alert('Inicio de sesión exitoso.'); window.location.href = 'HomePage.php';</script>";
             } else {
                 echo "<script>alert('Contraseña incorrecta.');</script>";
             }
