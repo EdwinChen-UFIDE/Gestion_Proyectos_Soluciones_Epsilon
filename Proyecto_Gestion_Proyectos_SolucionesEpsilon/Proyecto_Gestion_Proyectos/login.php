@@ -1,4 +1,11 @@
 <?php
+session_start(); // Iniciar sesión
+
+// Si el usuario ya ha iniciado sesión, redirigirlo al HomePage
+if (isset($_SESSION['user_id'])) {
+    header("Location: HomePage.php");
+    exit();
+}   
 // Incluye la configuración de la base de datos
 require_once 'db_config.php';
 

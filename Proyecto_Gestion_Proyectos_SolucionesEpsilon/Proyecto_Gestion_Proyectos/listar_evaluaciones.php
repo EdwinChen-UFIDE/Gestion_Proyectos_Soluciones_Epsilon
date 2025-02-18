@@ -77,11 +77,11 @@ include 'plantilla.php'
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body class="bg-light">
-<?php
+    <?php
     MostrarNavbar();
     ?>
     <div class="container mt-4">
-        <h2 class="text-white bg-primary p-3 rounded">Mis Evaluaciones</h2>
+        <h2 class="text-white p-3 rounded"style="background-color: #0b4c66;">Mis Evaluaciones</h2>
 
         <!-- Filtros -->
         <div class="card p-3 mb-3">
@@ -105,8 +105,8 @@ include 'plantilla.php'
                     <input type="date" id="fecha" name="fecha" value="<?= htmlspecialchars($filtro_fecha); ?>" class="form-control">
                 </div>
 
-                <div class="col-md-2 d-flex align-items-end">
-                    <button type="submit" class="btn btn-primary w-100">Filtrar</button>
+                <div class="col-md-2 d-flex align-items-center justify-content-center">
+                    <button type="submit" class="btn btn-primary w-100" style="background-color: #0b4c66;">Filtrar</button>
                 </div>
             </form>
         </div>

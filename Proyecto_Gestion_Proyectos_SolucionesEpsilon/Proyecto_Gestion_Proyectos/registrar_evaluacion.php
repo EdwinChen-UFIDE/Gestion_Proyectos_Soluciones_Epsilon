@@ -1,6 +1,7 @@
 <?php 
+session_start();
 require_once 'db_config.php';
-
+include 'Plantilla.php';
 try {
     $pdo = new PDO("mysql:host=$db_host;dbname=$db_name", $db_user, $db_pass);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -38,6 +39,9 @@ try {
     </style>
 </head>
 <body>
+<?php
+    MostrarNavbar();
+    ?>
     <div class="container mt-5">
         <div class="container-box">
             <h2 class="text-center mb-4">Registrar Nueva Evaluación</h2>

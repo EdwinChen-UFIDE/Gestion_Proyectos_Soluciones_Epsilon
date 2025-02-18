@@ -1,19 +1,26 @@
 <?php
+session_start();
 require_once 'db_config.php';
+Include 'Plantilla.php';
 
+// Verificar si el usuario ha iniciado sesión
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
+
+// Conexión a la base de datos
 try {
-    // Conexión a la base de datos
     $pdo = new PDO("mysql:host=$db_host;dbname=$db_name", $db_user, $db_pass);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-    // Consulta para obtener los roles y la cantidad de empleados asignados
-    $sql = "
+    // Obtener roles y número de empleados en cada rol
+    $stmt = $pdo->query("
         SELECT r.id, r.nombre, COUNT(e.id) AS num_empleados
         FROM roles r
         LEFT JOIN empleados e ON r.id = e.role_id
         GROUP BY r.id, r.nombre
-    ";
-    $stmt = $pdo->query($sql);
+    ");
     $roles = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     die("Error al conectar con la base de datos: " . $e->getMessage());
@@ -26,68 +33,46 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Roles</title>
-    <style>
-        table {
-            width: 60%;
-            border-collapse: collapse;
-            margin: 20px auto;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: left;
-        }
-        th {
-            background-color: #084A77;
-            color: white;
-        }
-        a {
-            padding: 6px 12px;
-            background-color: #084A77;
-            color: white;
-            text-decoration: none;
-            border-radius: 5px;
-        }
-        a:hover {
-            background-color: #084A77;
-        }
-    </style>
+    <link rel="stylesheet" href="../CSS/estilos.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <h2 style="text-align: center;">Lista de Roles</h2>
+    <?php MostrarNavbar(); ?>
 
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Nombre del Rol</th>
-                <th>Número de Empleados</th>
-                <th>Acciones</th>
-            </tr>
-        </thead>
-        <tbody>
-            <?php if (!empty($roles)): ?>
-                <?php foreach ($roles as $rol): ?>
-                    <tr>
-                        <td><?php echo $rol['id']; ?></td>
-                        <td><?php echo $rol['nombre']; ?></td>
-                        <td><?php echo $rol['num_empleados']; ?></td>
-                        <td>
-                            <a href="editar_Rol.php?id=<?php echo $rol['id']; ?>">Editar</a>
-                            <a href="eliminarRol.php?id=<?php echo $rol['id']; ?>" onclick="return confirm('¿Estás seguro de eliminar este rol?');">Eliminar</a>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            <?php else: ?>
+    <div class="container mt-4">
+        <h2 class="text-center mb-4">Lista de Roles</h2>
+        <div class="text-center mt-3">
+            <a href="registrar_roles.php" class="btn btn-success">Registrar Nuevo Rol</a>
+        </div>
+        <table class="table table-striped">
+            <thead class="table-dark">
                 <tr>
-                    <td colspan="4" style="text-align: center;">No hay roles registrados.</td>
+                    <th>ID</th>
+                    <th>Nombre del Rol</th>
+                    <th>Número de Empleados</th>
+                    <th>Acciones</th>
                 </tr>
-            <?php endif; ?>
-        </tbody>
-    </table>
-
-    <div style="text-align: center;">
-        <a href="Roles.php">Registrar Nuevo Rol</a>
+            </thead>
+            <tbody>
+                <?php if (!empty($roles)): ?>
+                    <?php foreach ($roles as $rol): ?>
+                        <tr>
+                            <td><?= htmlspecialchars($rol['id']) ?></td>
+                            <td><?= htmlspecialchars($rol['nombre']) ?></td>
+                            <td><?= htmlspecialchars($rol['num_empleados']) ?></td>
+                            <td>
+                                <a href="editar_Rol.php?id=<?= $rol['id'] ?>" class="btn btn-primary btn-sm">Editar</a>
+                                <a href="eliminarRol.php?id=<?= $rol['id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de eliminar este rol?');">Eliminar</a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
+                    <tr>
+                        <td colspan="4" class="text-center">No hay roles registrados.</td>
+                    </tr>
+                <?php endif; ?>
+            </tbody>
+        </table>
     </div>
 </body>
 </html>

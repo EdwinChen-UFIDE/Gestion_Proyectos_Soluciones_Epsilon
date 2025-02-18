@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'role_id' => $rol
         ]);
 
-        echo "<script>alert('Empleado registrado exitosamente.'); window.location.href = 'homepageAdmin.php';</script>";
+        echo "<script>alert('Empleado registrado exitosamente.'); window.location.href = 'listar_empleados.php';</script>";
     } catch (PDOException $e) {
         echo "<script>alert('Error al registrar el empleado: " . $e->getMessage() . "'); window.history.back();</script>";
     }

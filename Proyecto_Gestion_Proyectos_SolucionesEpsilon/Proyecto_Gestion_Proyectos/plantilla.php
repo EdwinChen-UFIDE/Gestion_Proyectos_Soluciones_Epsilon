@@ -1,7 +1,7 @@
 <?php
 function MostrarNavbar()
 {
-    session_start(); // Iniciar sesión para acceder a $_SESSION
+   
     ob_start();
     include "db_config.php";
 
@@ -20,8 +20,8 @@ function MostrarNavbar()
     <nav class="navbar navbar-expand-lg navbar-dark py-2">
         <div class="container-fluid">
             <!-- Logo y Nombre -->
-            <a href="index.php" class="navbar-brand">
-                <img src="logo.png" alt="Logo" width="30" height="30">
+            <a href="HomePage.php" class="navbar-brand">
+                <img src="../IMG/Logo_SE.png" alt="Logo" width="30" height="30">
                 Soluciones Epsilon
             </a>
 
@@ -32,16 +32,15 @@ function MostrarNavbar()
 
             <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                 <ul class="navbar-nav">
-                    <li class="nav-item"><a class="nav-link" href="listar_evaluaciones.php">Home</a></li>
-                    
                     <?php if ($userRole == 1) : ?>
                         <!-- Si es Admin -->
                         <li class="nav-item"><a class="nav-link" href="#">Contabilidad</a></li>
                         <li class="nav-item"><a class="nav-link" href="#">RPA</a></li>
-                        <li class="nav-item"><a class="nav-link" href="#">Evaluaciones</a></li>
+                        <li class="nav-item"><a class="nav-link" href="listar_empleados.php">Empleados</a></li>
+                        <li class="nav-item"><a class="nav-link" href="listar_evaluaciones.php">Evaluaciones</a></li>
                     <?php endif; ?>
                     
-                    <li class="nav-item"><a class="nav-link" href="#">Proyectos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="board.php">Proyectos</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Plantilla</a></li>
                     <li class="nav-item"><a class="nav-link" href="#">Reportes</a></li>
 
@@ -61,8 +60,16 @@ function MostrarNavbar()
                         <li class="nav-item px-2">
                             <a class="nav-link" href="#"><i class="fa-solid fa-bell"></i></a>
                         </li>
-                        <li class="nav-item px-2">
-                            <a class="nav-link" href="#"><i class="fa-solid fa-user"></i></a>
+                        <li class="nav-item dropdown px-2">
+                            <a class="nav-link" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-solid fa-user"></i>
+                            </a>
+                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                                <li><a class="dropdown-item" href="#">Perfil</a></li>
+                                <li><a class="dropdown-item" href="#">Configuración</a></li>
+                                <li><hr class="dropdown-divider"></li>
+                                <li><a class="dropdown-item text-danger" href="logout.php">Cerrar Sesión</a></li>
+                            </ul>
                         </li>
                     </ul>
                 </div>

@@ -1,7 +1,8 @@
 <?php
+Session_start();
 // db_config.php: Configuración de la base de datos
 require_once 'db_config.php';
-
+Include 'Plantilla.php';
 // Conexión a la base de datos
 try {
     $pdo = new PDO("mysql:host=$db_host;dbname=$db_name", $db_user, $db_pass);
@@ -49,6 +50,7 @@ function actualizarRol($pdo, $id, $nombre) {
    
 </head>
 <body>
+<?php MostrarNavbar(); ?>
     <div class="main-container">
         <div class="form-container" id="registro-rol"> 
             <h2>Registrar Nuevo Rol</h2>

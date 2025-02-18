@@ -1,17 +1,24 @@
 <?php
-// Incluye el archivo de configuración de la base de datos
+session_start();
 require_once 'db_config.php';
+include 'Plantilla.php';
+
+// Verificar si el usuario ha iniciado sesión
+if (!isset($_SESSION['user_id'])) {
+    header("Location: login.php");
+    exit();
+}
 
 // Verifica si se ha proporcionado un ID válido en la URL
 if (isset($_GET['id']) && !empty($_GET['id'])) {
     $id = intval($_GET['id']); // Convierte el ID a un entero para seguridad
 
     try {
-        // Conexión a la base de datos usando PDO
+        // Conexión a la base de datos
         $pdo = new PDO("mysql:host=$db_host;dbname=$db_name", $db_user, $db_pass);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        // Obtiene los datos del rol actual
+        // Obtener datos del rol
         $stmt = $pdo->prepare("SELECT * FROM roles WHERE id = :id");
         $stmt->execute(['id' => $id]);
         $rol = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -22,12 +29,10 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
             exit();
         }
     } catch (PDOException $e) {
-        // Muestra un mensaje de error si ocurre una excepción
         echo "<script>alert('Error al obtener el rol: " . $e->getMessage() . "'); window.history.back();</script>";
         exit();
     }
 } else {
-    // Muestra un mensaje si no se proporcionó un ID válido
     echo "<script>alert('Error: ID no válido.'); window.location.href = 'listar_roles.php';</script>";
     exit();
 }
@@ -37,19 +42,41 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Rol</title>
     <link rel="stylesheet" href="../CSS/estilos.css"> 
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <div class="form-container"> 
-        <h1>Editar Rol</h1>
-        <form action="procesar_editar_rol.php" method="POST">
-            <input type="hidden" name="id" value="<?php echo $rol['id']; ?>">
-            <label for="nombre">Nombre del Rol:</label>
-            <input type="text" id="nombre" name="nombre" value="<?php echo htmlspecialchars($rol['nombre']); ?>" required>
-            <br><br>
-            <button type="submit">Guardar Cambios</button>
-        </form>
+    <?php MostrarNavbar(); ?>
+
+    <div class="container mt-4">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card shadow-lg">
+                    <div class="card-header text-white text-center" style="background-color: #0b4c66;">
+                        <h2 class="h4">Editar Rol</h2>
+                    </div>
+                    <div class="card-body">
+                        <form action="procesar_editar_rol.php" method="POST">
+                            <input type="hidden" name="id" value="<?= htmlspecialchars($rol['id']); ?>">
+
+                            <div class="mb-3">
+                                <label for="nombre" class="form-label">Nombre del Rol:</label>
+                                <input type="text" id="nombre" name="nombre" class="form-control" value="<?= htmlspecialchars($rol['nombre']); ?>" required>
+                            </div>
+
+                            <div class="d-grid">
+                                <button type="submit" class="btn btn-success">Guardar Cambios</button>
+                                <a href="listar_roles.php" class="btn btn-secondary mt-2">Cancelar</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

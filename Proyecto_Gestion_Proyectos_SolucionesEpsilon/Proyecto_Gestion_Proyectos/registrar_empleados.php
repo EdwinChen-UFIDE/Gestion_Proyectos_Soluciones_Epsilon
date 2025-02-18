@@ -1,7 +1,8 @@
 <?php
+session_start();
 // Incluye la configuración de la base de datos
 require_once 'db_config.php';
-
+include 'Plantilla.php';
 // Conexión a la base de datos
 try {
     $pdo = new PDO("mysql:host=$db_host;dbname=$db_name", $db_user, $db_pass);
@@ -30,6 +31,9 @@ try {
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&family=Roboto+Slab:wght@400&display=swap" rel="stylesheet"> 
 </head>
 <body>
+<?php
+    MostrarNavbar();
+    ?>
     <div class="form-container"> 
         <h2>Registrar Nuevo Empleado</h2>
         <form method="POST" action="procesar_registro_empleado.php">
