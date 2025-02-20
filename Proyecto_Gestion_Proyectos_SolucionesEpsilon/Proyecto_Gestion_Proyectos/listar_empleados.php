@@ -38,49 +38,81 @@ include 'Plantilla.php';
     <title>Lista de Empleados</title>
     <link rel="stylesheet" href="../CSS/estilos.css"> 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- SweetAlert2 -->
 </head>
 <body>
-<?php
-    MostrarNavbar();
-    ?>
-        <div class="container mt-4">
-        <h2 class="text-center mb-4">Lista de Empleados</h2>
-        <div class="text-center mt-3">
-            <a href="registrar_empleados.php" class="btn btn-success">Registrar Nuevo Empleado</a>
-            <a href="listar_roles.php" class="btn btn-secondary ms-2">Ver Roles</a>
-        </div>
-        
-        <table class="table table-striped">
-            <thead class="table-dark">
-                <tr>
-                    <th>ID</th>
-                    <th>Nombre</th>
-                    <th>Apellidos</th>
-                    <th>Cédula</th>
-                    <th>Teléfono</th>
-                    <th>Email</th>
-                    <th>Rol</th>
-                    <th>Acciones</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($empleados as $empleado) : ?>
-                    <tr>
-                        <td><?= htmlspecialchars($empleado['id']) ?></td>
-                        <td><?= htmlspecialchars($empleado['nombre']) ?></td>
-                        <td><?= htmlspecialchars($empleado['apellidos']) ?></td>
-                        <td><?= htmlspecialchars($empleado['cedula']) ?></td>
-                        <td><?= htmlspecialchars($empleado['telefono']) ?></td>
-                        <td><?= htmlspecialchars($empleado['email']) ?></td>
-                        <td><?= htmlspecialchars($empleado['rol']) ?></td>
-                        <td>
-                            <a href="editar_empleado.php?id=<?= $empleado['id'] ?>" class="btn btn-primary btn-sm">Editar</a>
-                            <a href="eliminar_empleado.php?id=<?= $empleado['id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('¿Seguro que deseas eliminar este empleado?');">Eliminar</a>
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-        </table>
+<?php MostrarNavbar(); ?>
+
+<div class="container mt-4">
+    <h2 class="text-center mb-4">Lista de Empleados</h2>
+    <div class="text-center mt-3">
+        <a href="registrar_empleados.php" class="btn btn-success">Registrar Nuevo Empleado</a>
+        <a href="listar_roles.php" class="btn btn-secondary ms-2">Ver Roles</a>
     </div>
+    
+    <table class="table table-striped">
+        <thead class="table-dark">
+            <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Apellidos</th>
+                <th>Cédula</th>
+                <th>Teléfono</th>
+                <th>Email</th>
+                <th>Rol</th>
+                <th>Acciones</th>
+            </tr>
+        </thead>
+        <tbody>
+            <?php foreach ($empleados as $empleado) : ?>
+                <tr>
+                    <td><?= htmlspecialchars($empleado['id']) ?></td>
+                    <td><?= htmlspecialchars($empleado['nombre']) ?></td>
+                    <td><?= htmlspecialchars($empleado['apellidos']) ?></td>
+                    <td><?= htmlspecialchars($empleado['cedula']) ?></td>
+                    <td><?= htmlspecialchars($empleado['telefono']) ?></td>
+                    <td><?= htmlspecialchars($empleado['email']) ?></td>
+                    <td><?= htmlspecialchars($empleado['rol']) ?></td>
+                    <td>
+                        <a href="editar_empleado.php?id=<?= $empleado['id'] ?>" class="btn btn-primary btn-sm">Editar</a>
+                        <button class="btn btn-danger btn-sm" onclick="confirmarEliminacion(<?= $empleado['id'] ?>)">Eliminar</button>
+                    </td>
+                </tr>
+            <?php endforeach; ?>
+        </tbody>
+    </table>
+</div>
+
+<script>
+// Función para confirmar eliminación con SweetAlert2
+function confirmarEliminacion(id) {
+    Swal.fire({
+        title: "¿Estás seguro?",
+        text: "Esta acción no se puede deshacer.",
+        icon: "warning",
+        showCancelButton: true,
+        confirmButtonColor: "#d33",
+        cancelButtonColor: "#3085d6",
+        confirmButtonText: "Sí, eliminar",
+        cancelButtonText: "Cancelar"
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = "eliminar_empleado.php?id=" + id;
+        }
+    });
+}
+
+// Mostrar alertas de sesión si existen
+<?php if (isset($_SESSION['alert'])) : ?>
+    Swal.fire({
+        icon: "<?= $_SESSION['alert']['type']; ?>",
+        title: "<?= $_SESSION['alert']['message']; ?>",
+        confirmButtonColor: "#3085d6",
+        confirmButtonText: "Aceptar"
+    });
+    <?php unset($_SESSION['alert']); ?>
+<?php endif; ?>
+</script>
+
 </body>
 </html>

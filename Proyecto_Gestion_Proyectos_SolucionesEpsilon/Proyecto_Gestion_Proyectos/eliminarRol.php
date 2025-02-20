@@ -18,17 +18,37 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         // Verifica si se eliminó algún registro
         if ($stmt->rowCount() > 0) {
             // Muestra un mensaje de éxito y redirige a la lista de roles
-            echo "<script>alert('Rol eliminado correctamente.'); window.location.href = 'listar_roles.php';</script>";
+            $_SESSION['alert'] = [
+                'type' => 'success',
+                'message' => 'Rol eliminado correctamente.'
+            ];
+            header("Location: listar_roles.php");
+            exit;
         } else {
             // Muestra un mensaje si no se encontró el rol
-            echo "<script>alert('Error: No se encontró el rol.'); window.history.back();</script>";
+            $_SESSION['alert'] = [
+                'type' => 'error',
+                'message' => 'Error: No se encontró el rol.'
+            ];
+            header("Location: listar_roles.php");
+            exit;
         }
     } catch (PDOException $e) {
         // Muestra un mensaje de error si ocurre una excepción
-        echo "<script>alert('Error al eliminar el rol: " . $e->getMessage() . "'); window.history.back();</script>";
+        $_SESSION['alert'] = [
+            'type' => 'error',
+            'message' => 'Error al eliminar el rol: ' . $e->getMessage()
+        ];
+        header("Location: listar_roles.php");
+        exit;
     }
 } else {
     // Muestra un mensaje si no se proporcionó un ID válido
-    echo "<script>alert('Error: ID no válido.'); window.history.back();</script>";
+    $_SESSION['alert'] = [
+        'type' => 'error',
+        'message' => 'Error: ID no válido.'
+    ];
+    header("Location: listar_roles.php");
+    exit;
 }
 ?>

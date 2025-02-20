@@ -32,7 +32,7 @@ function MostrarNavbar()
 
             <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                 <ul class="navbar-nav">
-                    <?php if ($userRole == 1) : ?>
+                    <?php if ($userRole == 8) : ?>
                         <!-- Si es Admin -->
                         <li class="nav-item"><a class="nav-link" href="#">Contabilidad</a></li>
                         <li class="nav-item"><a class="nav-link" href="#">RPA</a></li>

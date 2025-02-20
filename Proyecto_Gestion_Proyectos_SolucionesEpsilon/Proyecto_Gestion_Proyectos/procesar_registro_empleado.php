@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once 'db_config.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -13,7 +14,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Validar campos obligatorios
     if (empty($nombre) || empty($apellidos) || empty($fecha_nacimiento) || empty($cedula) || empty($telefono) || empty($email) || empty($password) || empty($rol)) {
-        echo "<script>alert('Todos los campos son obligatorios.'); window.history.back();</script>";
+        $_SESSION['alert'] = [
+            'type' => 'error',
+            'message' => 'Todos los campos son obligatorios.'
+        ];
+        header("Location: registrar_empleado.php");
         exit;
     }
 
@@ -27,7 +32,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $existe = $stmt->fetchColumn();
 
         if ($existe > 0) {
-            echo "<script>alert('La cédula o el correo electrónico ya están registrados.'); window.history.back();</script>";
+            $_SESSION['alert'] = [
+                'type' => 'error',
+                'message' => 'La cédula o el correo electrónico ya están registrados.'
+            ];
+            header("Location: registrar_empleado.php");
             exit;
         }
 
@@ -47,9 +56,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'role_id' => $rol
         ]);
 
-        echo "<script>alert('Empleado registrado exitosamente.'); window.location.href = 'listar_empleados.php';</script>";
+        $_SESSION['alert'] = [
+            'type' => 'success',
+            'message' => 'Empleado registrado exitosamente.'
+        ];
+        header("Location: listar_empleados.php");
+        exit;
     } catch (PDOException $e) {
-        echo "<script>alert('Error al registrar el empleado: " . $e->getMessage() . "'); window.history.back();</script>";
+        $_SESSION['alert'] = [
+            'type' => 'error',
+            'message' => 'Error al registrar el empleado: ' . $e->getMessage()
+        ];
+        header("Location: registrar_empleado.php");
+        exit;
     }
 }
 ?>

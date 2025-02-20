@@ -35,6 +35,7 @@ try {
     <title>Lista de Roles</title>
     <link rel="stylesheet" href="../CSS/estilos.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
     <?php MostrarNavbar(); ?>
@@ -74,5 +75,17 @@ try {
             </tbody>
         </table>
     </div>
+
+    <script>
+    <?php if (isset($_SESSION['alert'])) : ?>
+        Swal.fire({
+            icon: "<?= $_SESSION['alert']['type']; ?>",
+            title: "<?= $_SESSION['alert']['message']; ?>",
+            confirmButtonColor: "#3085d6",
+            confirmButtonText: "Aceptar"
+        });
+        <?php unset($_SESSION['alert']); ?>
+    <?php endif; ?>
+    </script>
 </body>
 </html>

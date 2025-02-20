@@ -11,9 +11,18 @@ if (isset($_GET['id'])) {
         $stmt = $pdo->prepare("DELETE FROM empleados WHERE id = :id");
         $stmt->execute(['id' => $id]);
 
-        echo "<script>alert('Empleado eliminado correctamente.'); window.location.href = 'listar_empleados.php';</script>";
+        // Guardamos el mensaje en una variable de sesión
+        session_start();
+        $_SESSION['alert'] = ['type' => 'success', 'message' => 'Empleado eliminado correctamente.'];
+
+        // Redirigir a la lista de empleados
+        header("Location: listar_empleados.php");
+        exit();
     } catch (PDOException $e) {
-        echo "<script>alert('Error al eliminar empleado: " . $e->getMessage() . "'); window.history.back();</script>";
+        session_start();
+        $_SESSION['alert'] = ['type' => 'error', 'message' => 'Error al eliminar empleado: ' . $e->getMessage()];
+        header("Location: listar_empleados.php");
+        exit();
     }
 }
 ?>

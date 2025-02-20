@@ -1,4 +1,5 @@
 <?php
+session_start();
 require_once 'db_config.php';
 
 error_reporting(E_ALL);
@@ -15,7 +16,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $rol = isset($_POST['rol']) ? intval($_POST['rol']) : 0;
 
     if ($id <= 0 || empty($nombre) || empty($apellidos) || empty($fecha_nacimiento) || empty($cedula) || empty($telefono) || empty($email) || $rol <= 0) {
-        die("Error: Todos los campos son obligatorios.");
+        $_SESSION['alert'] = [
+            'type' => 'error',
+            'message' => 'Todos los campos son obligatorios.'
+        ];
+        header("Location: editar_empleado.php?id=$id");
+        exit;
     }
 
     try {
@@ -26,7 +32,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $pdo->prepare("SELECT id FROM roles WHERE id = :rol");
         $stmt->execute(['rol' => $rol]);
         if ($stmt->rowCount() == 0) {
-            die("Error: El rol seleccionado no existe.");
+            $_SESSION['alert'] = [
+                'type' => 'error',
+                'message' => 'El rol seleccionado no existe.'
+            ];
+            header("Location: editar_empleado.php?id=$id");
+            exit;
         }
 
         // Actualizar el empleado
@@ -47,10 +58,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'rol' => $rol
         ]);
 
-        echo "<script>alert('Empleado actualizado correctamente.'); window.location.href = 'listar_empleados.php';</script>";
+        $_SESSION['alert'] = [
+            'type' => 'success',
+            'message' => 'Empleado actualizado correctamente.'
+        ];
+        header("Location: listar_empleados.php");
         exit;
     } catch (PDOException $e) {
-        die("Error al actualizar: " . $e->getMessage());
+        $_SESSION['alert'] = [
+            'type' => 'error',
+            'message' => 'Error al actualizar: ' . $e->getMessage()
+        ];
+        header("Location: editar_empleado.php?id=$id");
+        exit;
     }
 }
 ?>
