@@ -49,7 +49,7 @@ if (isset($_GET['id'])) {
         <div class="row justify-content-center">
             <div class="col-md-6">
                 <div class="card shadow-lg">
-                <div class="card-header text-white text-center" style="background-color: #0b4c66;">
+                    <div class="card-header text-white text-center" style="background-color: #0b4c66;">
                         <h2 class="h4">Editar Empleado</h2>
                     </div>
                     <div class="card-body">

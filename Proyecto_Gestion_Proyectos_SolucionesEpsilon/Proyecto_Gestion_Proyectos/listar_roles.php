@@ -62,8 +62,8 @@ try {
                             <td><?= htmlspecialchars($rol['nombre']) ?></td>
                             <td><?= htmlspecialchars($rol['num_empleados']) ?></td>
                             <td>
-                                <a href="editar_Rol.php?id=<?= $rol['id'] ?>" class="btn btn-primary btn-sm">Editar</a>
-                                <a href="eliminarRol.php?id=<?= $rol['id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de eliminar este rol?');">Eliminar</a>
+                                <a href="editar_rol.php?id=<?= $rol['id'] ?>" class="btn btn-primary btn-sm">Editar</a>
+                                <a href="eliminar_rol.php?id=<?= $rol['id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de eliminar este rol?');">Eliminar</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>

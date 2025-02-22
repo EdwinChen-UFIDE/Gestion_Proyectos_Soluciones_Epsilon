@@ -42,7 +42,7 @@ if ($filtro_fecha) {
     $params['fecha'] = $filtro_fecha;
 }
 
-// Ordenar por fecha y limitar a 10 resultados
+// Ordenar por fecha y ultimos 10 resultados
 $sql .= " ORDER BY e.fecha DESC LIMIT 10";
 
 try {
@@ -83,7 +83,6 @@ include 'plantilla.php'
     <div class="container mt-4">
         <h2 class="text-white p-3 rounded"style="background-color: #0b4c66;">Mis Evaluaciones</h2>
 
-        <!-- Filtros -->
         <div class="card p-3 mb-3">
             <form method="GET" action="listar_evaluaciones.php" class="row g-3">
                 <?php if ($es_admin): ?>

@@ -1,11 +1,3 @@
-.main_admin {
-    margin-left: 250px; /* Ajuste para que no se solape con el sidebar */
-    margin-top: 50px; /* Ajuste para que no se solape con el navbar */
-    padding: 20px;
-    height: auto;
-    overflow-y: auto;
-}
-
 .body {
     font-family: 'Roboto', sans-serif;
     background-color: #FFFFFF; 

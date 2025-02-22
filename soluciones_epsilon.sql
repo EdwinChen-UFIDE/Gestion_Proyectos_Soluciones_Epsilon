@@ -210,6 +210,50 @@ CREATE TABLE evaluaciones_desempeno (
     FOREIGN KEY (empleado_id) REFERENCES empleados(id) ON DELETE CASCADE
 );
 
+-- Tabla de Estados
+CREATE TABLE estados (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(50) NOT NULL UNIQUE
+);
+
+INSERT INTO estados (nombre) VALUES 
+('Por hacer'),
+('En progreso'),
+('Completado'),
+('Cancelado'),
+('Bloqueado');
+
+/*
+-- Tabla de Proyectos
+CREATE TABLE proyectos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(255) NOT NULL,
+    descripcion TEXT,
+    fecha_inicio DATE NOT NULL,
+    fecha_fin DATE NOT NULL,
+    estado_id INT NOT NULL, -- Relación con la tabla estados
+    empleado_id INT DEFAULT NULL, -- Relación con empleados
+    FOREIGN KEY (estado_id) REFERENCES estados(id) ON DELETE RESTRICT,
+    FOREIGN KEY (empleado_id) REFERENCES empleados(id) ON DELETE SET NULL 
+);
+*/  --Idea de tabla de proyectos
+
+-- Tabla de Tareas
+CREATE TABLE tareas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(255) NOT NULL,
+    descripcion TEXT,
+    fecha_asignacion DATE NOT NULL DEFAULT CURRENT_DATE,
+    fecha_vencimiento DATE,
+    estado_id INT NOT NULL, -- Relación con la tabla estados
+    prioridad ENUM('baja', 'media', 'alta', 'urgente') DEFAULT 'media',
+    --proyecto_id INT NOT NULL, -- Relación con proyectos SE DESCARTAN POR EL MOMENTO AL NO TENER PROYECTOS
+    usuario_id INT DEFAULT NULL, -- Relación con usuarios en lugar de empleados
+    FOREIGN KEY (estado_id) REFERENCES estados(id) ON DELETE RESTRICT,
+    --FOREIGN KEY (proyecto_id) REFERENCES proyectos(id) ON DELETE CASCADE, SE DESCARTAN POR EL MOMENTO AL NO TENER PROYECTOS
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE SET NULL
+);
+
 
 
 CREATE TABLE proyectos (

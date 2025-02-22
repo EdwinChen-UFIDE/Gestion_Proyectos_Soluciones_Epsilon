@@ -38,7 +38,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <?php MostrarNavbar(); ?>
 
 <div class="form-container">
-<?php MostrarNavbar(); ?>
     <h2>Crear Nuevo Proyecto</h2>
     <form action="proyectos.php" method="POST">
         <label for="nombre">Nombre del Proyecto:</label>
