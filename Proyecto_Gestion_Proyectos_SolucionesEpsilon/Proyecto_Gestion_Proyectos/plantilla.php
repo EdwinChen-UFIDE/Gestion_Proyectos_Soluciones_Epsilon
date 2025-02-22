@@ -40,7 +40,7 @@ function MostrarNavbar()
                         <li class="nav-item"><a class="nav-link" href="listar_evaluaciones.php">Evaluaciones</a></li>
                     <?php endif; ?>
                     
-                    <li class="nav-item"><a class="nav-link" href="board.php">Proyectos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="proyectos.php">Proyectos</a></li>
                     <li class="nav-item"><a class="nav-link" href="ModuloPlantillas.php">Plantilla</a></li>
                     <li class="nav-item"><a class="nav-link" href="Reportes.php">Reportes</a></li>
 

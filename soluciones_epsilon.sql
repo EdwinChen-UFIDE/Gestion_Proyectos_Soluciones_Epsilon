@@ -209,3 +209,18 @@ CREATE TABLE evaluaciones_desempeno (
     cumplimiento_plazos FLOAT DEFAULT 0.0,
     FOREIGN KEY (empleado_id) REFERENCES empleados(id) ON DELETE CASCADE
 );
+
+
+
+CREATE TABLE proyectos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(255) NOT NULL,
+    cliente VARCHAR(255) NOT NULL,
+    fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+
+INSERT INTO proyectos (nombre, cliente) VALUES
+('Proyecto A', 'Cliente X'),
+('Proyecto B', 'Cliente Y'),
+('Proyecto C', 'Cliente Z');
