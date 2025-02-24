@@ -59,8 +59,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         </select>
 
         <button type="submit" class="btn">Crear Proyecto</button>
-        <a href="listarproyectos.php" class="btn">Ver Proyectos Creados</a>
     </form>
+
+    <!-- Contenedor para los botones "Ver Proyectos Creados" y "Ver Calendario" -->
+    <div style="display: flex; justify-content: space-between; margin-top: 20px;">
+        <a href="listarproyectos.php" class="btn">Ver Proyectos Creados</a>
+        <a href="calendario.php" class="btn">Ver Calendario</a>
+    </div>
 </div>
 
 </body>

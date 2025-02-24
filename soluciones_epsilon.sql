@@ -270,3 +270,14 @@ INSERT INTO proyectos (nombre, cliente) VALUES
 ('Proyecto C', 'Cliente Z');
 
 ALTER TABLE proyectos ADD COLUMN estado ENUM('En progreso', 'En revisión', 'Finalizado', 'Inactivo') NOT NULL DEFAULT 'En progreso';
+
+-- Tabla de calendario:
+
+CREATE TABLE calendario (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    titulo VARCHAR(255) NOT NULL,
+    descripcion TEXT,
+    fecha_inicio DATETIME NOT NULL,
+    fecha_fin DATETIME NOT NULL,
+    tipo ENUM('Tarea', 'Reunión') NOT NULL DEFAULT 'Tarea'
+);
