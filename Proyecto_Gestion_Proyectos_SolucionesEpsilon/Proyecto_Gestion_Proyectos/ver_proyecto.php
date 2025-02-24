@@ -40,7 +40,8 @@ try {
     <p><strong>Nombre:</strong> <?= htmlspecialchars($proyecto['nombre']); ?></p>
     <p><strong>Cliente:</strong> <?= htmlspecialchars($proyecto['cliente']); ?></p>
     <p><strong>Fecha de Creación:</strong> <?= htmlspecialchars($proyecto['fecha_creacion']); ?></p>
-    
+    <p><strong>Estado:</strong> <?= htmlspecialchars($proyecto['estado']); ?></p> <!-- Nuevo campo agregado -->
+
     <a href="editar_proyecto.php?id=<?= $proyecto['id']; ?>" class="btn">Editar</a>
     <a href="eliminar_proyecto.php?id=<?= $proyecto['id']; ?>" class="btn" onclick="return confirm('¿Estás seguro de eliminar este proyecto?');">Eliminar</a>
     <a href="proyectos.php" class="btn">Volver</a>

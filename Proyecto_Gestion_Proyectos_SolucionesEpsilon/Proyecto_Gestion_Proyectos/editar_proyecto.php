@@ -14,9 +14,11 @@ try {
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $nombre = $_POST['nombre'];
         $cliente = $_POST['cliente'];
+        $estado = $_POST['estado']; // Nuevo campo
 
-        $stmt = $pdo->prepare("UPDATE proyectos SET nombre = ?, cliente = ? WHERE id = ?");
-        $stmt->execute([$nombre, $cliente, $_GET['id']]);
+        // Actualizar el proyecto con el estado
+        $stmt = $pdo->prepare("UPDATE proyectos SET nombre = ?, cliente = ?, estado = ? WHERE id = ?");
+        $stmt->execute([$nombre, $cliente, $estado, $_GET['id']]);
 
         echo "<script>
             alert('Proyecto actualizado correctamente');
@@ -25,6 +27,7 @@ try {
         exit;
     }
 
+    // Obtener datos del proyecto incluyendo el estado
     $stmt = $pdo->prepare("SELECT * FROM proyectos WHERE id = ?");
     $stmt->execute([$_GET['id']]);
     $proyecto = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -56,6 +59,15 @@ try {
 
         <label for="cliente">Cliente:</label>
         <input type="text" name="cliente" id="cliente" value="<?= htmlspecialchars($proyecto['cliente']); ?>" required>
+
+        <!-- Nuevo campo para el estado -->
+        <label for="estado">Estado del Proyecto:</label>
+        <select name="estado" id="estado">
+            <option value="En progreso" <?php if ($proyecto['estado'] == 'En progreso') echo 'selected'; ?>>En progreso</option>
+            <option value="En revisión" <?php if ($proyecto['estado'] == 'En revisión') echo 'selected'; ?>>En revisión</option>
+            <option value="Finalizado" <?php if ($proyecto['estado'] == 'Finalizado') echo 'selected'; ?>>Finalizado</option>
+            <option value="Inactivo" <?php if ($proyecto['estado'] == 'Inactivo') echo 'selected'; ?>>Inactivo</option>
+        </select>
 
         <button type="submit" class="btn">Guardar Cambios</button>
     </form>

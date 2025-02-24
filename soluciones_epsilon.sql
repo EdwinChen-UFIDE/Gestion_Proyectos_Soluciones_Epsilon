@@ -268,3 +268,5 @@ INSERT INTO proyectos (nombre, cliente) VALUES
 ('Proyecto A', 'Cliente X'),
 ('Proyecto B', 'Cliente Y'),
 ('Proyecto C', 'Cliente Z');
+
+ALTER TABLE proyectos ADD COLUMN estado ENUM('En progreso', 'En revisión', 'Finalizado', 'Inactivo') NOT NULL DEFAULT 'En progreso';

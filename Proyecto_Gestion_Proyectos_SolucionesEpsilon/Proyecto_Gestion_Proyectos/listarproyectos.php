@@ -10,12 +10,24 @@ try {
     die("Error de conexión a la base de datos: " . $e->getMessage());
 }
 
-if (isset($_GET['ordenar']) && $_GET['ordenar'] == 'fecha') {
-    $stmt = $pdo->prepare("SELECT * FROM proyectos ORDER BY fecha_creacion ASC");
-} else {
-    $stmt = $pdo->prepare("SELECT * FROM proyectos");
+// Obtener filtro de estado si se ha seleccionado
+$filtro_estado = isset($_GET['filtro_estado']) ? $_GET['filtro_estado'] : '';
+
+// Construcción de la consulta SQL
+$sql = "SELECT * FROM proyectos";
+$params = [];
+
+if ($filtro_estado) {
+    $sql .= " WHERE estado = ?";
+    $params[] = $filtro_estado;
 }
-$stmt->execute();
+
+if (isset($_GET['ordenar']) && $_GET['ordenar'] == 'fecha') {
+    $sql .= " ORDER BY fecha_creacion ASC";
+}
+
+$stmt = $pdo->prepare($sql);
+$stmt->execute($params);
 $proyectos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 ?>
 
@@ -34,13 +46,28 @@ $proyectos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
 <div class="form-container"> 
     <h2>Lista de Proyectos</h2>
+
+    <!-- Filtro por estado -->
+    <form method="GET" action="listarproyectos.php">
+        <label for="filtro_estado">Filtrar por estado:</label>
+        <select name="filtro_estado" onchange="this.form.submit()">
+            <option value="">Todos</option>
+            <option value="En progreso" <?= $filtro_estado == 'En progreso' ? 'selected' : ''; ?>>En progreso</option>
+            <option value="En revisión" <?= $filtro_estado == 'En revisión' ? 'selected' : ''; ?>>En revisión</option>
+            <option value="Finalizado" <?= $filtro_estado == 'Finalizado' ? 'selected' : ''; ?>>Finalizado</option>
+            <option value="Inactivo" <?= $filtro_estado == 'Inactivo' ? 'selected' : ''; ?>>Inactivo</option>
+        </select>
+    </form>
+
     <a href="?ordenar=fecha" class="btn">Ordenar por fecha</a>
+
     <table border="1">
         <tr>
             <th>ID</th>
             <th>Nombre del Proyecto</th>
             <th>Cliente</th>
             <th>Fecha de Creación</th>
+            <th>Estado</th>
             <th>Acciones</th>
         </tr>
         <?php foreach ($proyectos as $proyecto): ?>
@@ -49,6 +76,7 @@ $proyectos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <td><?= htmlspecialchars($proyecto['nombre']); ?></td>
                 <td><?= htmlspecialchars($proyecto['cliente']); ?></td>
                 <td><?= htmlspecialchars($proyecto['fecha_creacion']); ?></td>
+                <td><?= htmlspecialchars($proyecto['estado']); ?></td>
                 <td>
                     <a href="ver_proyecto.php?id=<?= $proyecto['id']; ?>" class="btn">Ver Detalles</a>
                     <a href="editar_proyecto.php?id=<?= $proyecto['id']; ?>" class="btn">Editar</a>
