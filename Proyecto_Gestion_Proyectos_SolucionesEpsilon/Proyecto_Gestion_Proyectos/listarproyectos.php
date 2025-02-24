@@ -51,6 +51,8 @@ $proyectos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <td><?= htmlspecialchars($proyecto['fecha_creacion']); ?></td>
                 <td>
                     <a href="ver_proyecto.php?id=<?= $proyecto['id']; ?>" class="btn">Ver Detalles</a>
+                    <a href="editar_proyecto.php?id=<?= $proyecto['id']; ?>" class="btn">Editar</a>
+                    <a href="eliminar_proyecto.php?id=<?= $proyecto['id']; ?>" class="btn" onclick="return confirm('¿Estás seguro de eliminar este proyecto?');">Eliminar</a>
                 </td>
             </tr>
         <?php endforeach; ?>

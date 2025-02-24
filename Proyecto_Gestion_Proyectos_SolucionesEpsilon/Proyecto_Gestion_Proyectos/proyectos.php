@@ -50,6 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <input type="text" name="cliente" id="cliente" required>
 
         <button type="submit" class="btn">Crear Proyecto</button>
+        <a href="listarproyectos.php" class="btn">Ver Proyectos Creados</a>
     </form>
 </div>
 </body>
