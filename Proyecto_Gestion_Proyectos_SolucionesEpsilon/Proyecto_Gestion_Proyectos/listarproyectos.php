@@ -59,7 +59,7 @@ $proyectos = $stmt->fetchAll(PDO::FETCH_ASSOC);
         </select>
     </form>
 
-    <a href="?ordenar=fecha" class="btn">Ordenar por fecha</a>
+    <a href="?ordenar=fecha" class="btn2">Ordenar por fecha</a>
 
     <table border="1">
         <tr>
@@ -80,12 +80,32 @@ $proyectos = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <td>
                     <a href="ver_proyecto.php?id=<?= $proyecto['id']; ?>" class="btn">Ver Detalles</a>
                     <a href="editar_proyecto.php?id=<?= $proyecto['id']; ?>" class="btn">Editar</a>
-                    <a href="eliminar_proyecto.php?id=<?= $proyecto['id']; ?>" class="btn" onclick="return confirm('¿Estás seguro de eliminar este proyecto?');">Eliminar</a>
+                    <a href="javascript:void(0);" class="btn" onclick="confirmarEliminar(<?= $proyecto['id']; ?>);">Eliminar</a>
                 </td>
             </tr>
         <?php endforeach; ?>
     </table>
 </div>
+
+<script>
+    function confirmarEliminar(id) {
+        event.preventDefault();  // Prevenir que el enlace se siga
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "¡Este proyecto se eliminará permanentemente!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Redirigir al enlace de eliminación con el ID del proyecto
+                window.location.href = "eliminar_proyecto.php?id=" + id;
+            }
+        });
+    }
+</script>
 
 </body>
 </html>

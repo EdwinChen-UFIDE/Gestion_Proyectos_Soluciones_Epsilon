@@ -29,6 +29,7 @@ try {
     <meta charset="UTF-8">
     <title>Detalles del Proyecto</title>
     <link rel="stylesheet" href="../CSS/estilos.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- SweetAlert -->
 </head>
 <body>
 
@@ -43,9 +44,47 @@ try {
     <p><strong>Estado:</strong> <?= htmlspecialchars($proyecto['estado']); ?></p> <!-- Nuevo campo agregado -->
 
     <a href="editar_proyecto.php?id=<?= $proyecto['id']; ?>" class="btn">Editar</a>
-    <a href="eliminar_proyecto.php?id=<?= $proyecto['id']; ?>" class="btn" onclick="return confirm('¿Estás seguro de eliminar este proyecto?');">Eliminar</a>
+    <a href="eliminar_proyecto.php?id=<?= $proyecto['id']; ?>" class="btn btn-delete">Eliminar</a>
     <a href="proyectos.php" class="btn">Volver</a>
 </div>
+
+<script>
+    // Confirmación para eliminar con SweetAlert
+    document.querySelector('.btn-delete').addEventListener('click', function(event) {
+        event.preventDefault();
+        let url = this.getAttribute('href');
+
+        Swal.fire({
+            title: "¿Estás seguro?",
+            text: "No podrás revertir esta acción",
+            icon: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#d33",
+            cancelButtonColor: "#3085d6",
+            confirmButtonText: "Sí, eliminar",
+            cancelButtonText: "Cancelar"
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = url;
+            }
+        });
+    });
+
+    // Mensaje de éxito después de una acción
+    function mostrarMensaje(tipo, mensaje) {
+        Swal.fire({
+            icon: tipo,
+            title: mensaje,
+            showConfirmButton: false,
+            timer: 2000
+        });
+    }
+
+    // Mensaje de éxito si la URL tiene ?success=true
+    <?php if (isset($_GET['success'])): ?>
+        mostrarMensaje("success", "Acción realizada con éxito");
+    <?php endif; ?>
+</script>
 
 </body>
 </html>

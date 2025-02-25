@@ -3,6 +3,8 @@ session_start();
 require_once 'db_config.php';
 include 'Plantilla.php';
 
+$proyecto_creado = false;
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
         $pdo = new PDO("mysql:host=$db_host;dbname=$db_name", $db_user, $db_pass);
@@ -17,16 +19,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $stmt = $pdo->prepare("INSERT INTO proyectos (nombre, cliente, estado, fecha_creacion) VALUES (?, ?, ?, ?)");
         $stmt->execute([$nombre, $cliente, $estado, $fecha_creacion]);
 
-        echo "<script>
-            alert('Proyecto creado exitosamente');
-            window.location.href = 'proyectos.php';
-        </script>";
+        // Marcar que el proyecto fue creado
+        $proyecto_creado = true;
 
     } catch (PDOException $e) {
         die("Error al crear el proyecto: " . $e->getMessage());
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -67,6 +68,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <a href="calendario.php" class="btn">Ver Calendario</a>
     </div>
 </div>
+
+<?php if ($proyecto_creado): ?>
+    <script>
+        Swal.fire({
+            title: '¡Éxito!',
+            text: 'Proyecto creado exitosamente.',
+            icon: 'success',
+            confirmButtonText: 'Aceptar'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = 'proyectos.php'; // Redirigir a la página de proyectos
+            }
+        });
+    </script>
+<?php endif; ?>
 
 </body>
 </html>
