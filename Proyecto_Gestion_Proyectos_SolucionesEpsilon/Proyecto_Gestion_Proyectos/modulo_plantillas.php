@@ -1,30 +1,27 @@
 <?php
-Session_start();
-// db_config.php: Configuración de la base de datos
+session_start();
 require_once 'db_config.php';
-Include 'Plantilla.php';
-// Conexión a la base de datos
-try {
-    $pdo = new PDO("mysql:host=$db_host;dbname=$db_name", $db_user, $db_pass);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-} catch (PDOException $e) {
-    die("Error de conexión a la base de datos: " . $e->getMessage());
-}
+include 'plantilla.php';
+$templates = json_decode(file_get_contents('templates.json'), true);
 ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seccion de Reportes</title>
-    <link rel="stylesheet" href="../CSS/estilos.css">
-   
+<link rel="stylesheet" href="../CSS/estilos.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&family=Roboto+Slab:wght@400&display=swap" rel="stylesheet"> 
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <title>Seleccionar Plantilla</title>
 </head>
 <body>
-<?php MostrarNavbar(); ?>
-    <div class="main-container">
-        <div class="form-container" id="ModuloPlantillas"> 
-            <h2>Placeholder temporal para desarrollo futuro (Plantillas)</h2>
-
-
+    <?php MostrarNavBar(); ?>
+    <div class="plantillas">
+        <?php foreach ($templates as $template): ?>
+            <div class="plantilla">
+                <h3><?= htmlspecialchars($template['nombre']); ?></h3>
+                <img src="<?= htmlspecialchars($template['preview']); ?>" width="300px" onerror="this.onerror=null; this.src='IMG/Bizland.jpg';">
+                <a href="seleccion_plantilla.php?url=<?= urlencode($template['url']); ?>">Seleccionar</a>
+            </div>
+        <?php endforeach; ?>
+    </div>
 </body>
+</html>
