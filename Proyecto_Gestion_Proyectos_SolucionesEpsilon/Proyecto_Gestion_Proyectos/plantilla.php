@@ -32,7 +32,7 @@ function MostrarNavbar()
 
             <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                 <ul class="navbar-nav">
-                    <?php if ($userRole == 8) : ?>
+                    <?php if ($userRole == 1) : ?>
                         <!-- Si es Admin -->
                         <li class="nav-item"><a class="nav-link" href="contabilidad.php">Contabilidad</a></li>
                         <li class="nav-item"><a class="nav-link" href="board.php">RPA</a></li>
@@ -40,7 +40,7 @@ function MostrarNavbar()
                         <li class="nav-item"><a class="nav-link" href="listar_evaluaciones.php">Evaluaciones</a></li>
                     <?php endif; ?>
                     
-                    <li class="nav-item"><a class="nav-link" href="proyectos.php">Proyectos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="listar_proyectos.php">Proyectos</a></li>
                     <li class="nav-item"><a class="nav-link" href="modulo_plantillas.php">Plantilla</a></li>
                     <li class="nav-item"><a class="nav-link" href="Reportes.php">Reportes</a></li>
 

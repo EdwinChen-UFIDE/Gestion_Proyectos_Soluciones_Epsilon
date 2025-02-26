@@ -15,7 +15,7 @@ try {
     $stmt->execute([$_GET['id']]);
 
     // Redirigir a la página que mostrará el SweetAlert
-    header("Location: listarproyectos.php?status=success");
+    header("Location: listar_proyectos.php?status=success");
     exit();
 
 } catch (PDOException $e) {

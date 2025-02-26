@@ -25,9 +25,9 @@ try {
     }
 
     // Insertar tarea en la base de datos con usuario_id
-    $sql = "INSERT INTO tareas (nombre, descripcion, estado_id, usuario_id) VALUES (?, ?, ?, ?)";
+    $sql = "INSERT INTO tareas (nombre, descripcion, estado_id, usuario_id, proyecto_id) VALUES (?, ?, ?, ?, ?)";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([$nombre, $descripcion, $estado, $usuario_id]);
+    $stmt->execute([$nombre, $descripcion, $estado, $usuario_id, $_POST['proyecto_id']]);
 
     // Obtener la tarea recién insertada
     $lastId = $pdo->lastInsertId();

@@ -60,6 +60,7 @@ $proyectos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     </form>
 
     <a href="?ordenar=fecha" class="btn2">Ordenar por fecha</a>
+    <a href="board.php" class="btn2">Tareas</a>
 
     <table border="1">
         <tr>

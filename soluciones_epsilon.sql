@@ -223,21 +223,6 @@ INSERT INTO estados (nombre) VALUES
 ('Cancelado'),
 ('Bloqueado');
 
-/*
--- Tabla de Proyectos
-CREATE TABLE proyectos (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(255) NOT NULL,
-    descripcion TEXT,
-    fecha_inicio DATE NOT NULL,
-    fecha_fin DATE NOT NULL,
-    estado_id INT NOT NULL, -- Relación con la tabla estados
-    empleado_id INT DEFAULT NULL, -- Relación con empleados
-    FOREIGN KEY (estado_id) REFERENCES estados(id) ON DELETE RESTRICT,
-    FOREIGN KEY (empleado_id) REFERENCES empleados(id) ON DELETE SET NULL 
-);
-*/  --Idea de tabla de proyectos
-
 -- Tabla de Tareas
 CREATE TABLE tareas (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -281,3 +266,6 @@ CREATE TABLE calendario (
     fecha_fin DATETIME NOT NULL,
     tipo ENUM('Tarea', 'Reunión') NOT NULL DEFAULT 'Tarea'
 );
+
+ALTER TABLE tareas ADD COLUMN proyecto_id INT NOT NULL;
+ALTER TABLE tareas ADD CONSTRAINT fk_tareas_proyectos FOREIGN KEY (proyecto_id) REFERENCES proyectos(id) ON DELETE CASCADE;

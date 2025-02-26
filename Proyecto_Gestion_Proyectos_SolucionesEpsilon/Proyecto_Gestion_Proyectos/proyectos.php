@@ -64,7 +64,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     <!-- Contenedor para los botones "Ver Proyectos Creados" y "Ver Calendario" -->
     <div style="display: flex; justify-content: space-between; margin-top: 20px;">
-        <a href="listarproyectos.php" class="btn">Ver Proyectos Creados</a>
+        <a href="listar_proyectos.php" class="btn">Ver Proyectos Creados</a>
         <a href="calendario.php" class="btn">Ver Calendario</a>
     </div>
 </div>
