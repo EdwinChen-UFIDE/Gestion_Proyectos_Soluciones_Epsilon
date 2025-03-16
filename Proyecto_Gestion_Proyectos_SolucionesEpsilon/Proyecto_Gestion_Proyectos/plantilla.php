@@ -1,4 +1,5 @@
 <?php
+
 function MostrarNavbar()
 {
    
@@ -41,7 +42,7 @@ function MostrarNavbar()
                     <?php endif; ?>
                     
                     <li class="nav-item"><a class="nav-link" href="listar_proyectos.php">Proyectos</a></li>
-                    <li class="nav-item"><a class="nav-link" href="modulo_plantillas.php">Plantilla</a></li>
+                    <li class="nav-item"><a class="nav-link" href="plantillas/main.php">Plantilla</a></li>
                     <li class="nav-item"><a class="nav-link" href="Reportes.php">Reportes</a></li>
 
                 </ul> 
