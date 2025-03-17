@@ -269,3 +269,19 @@ CREATE TABLE calendario (
 
 ALTER TABLE tareas ADD COLUMN proyecto_id INT NOT NULL;
 ALTER TABLE tareas ADD CONSTRAINT fk_tareas_proyectos FOREIGN KEY (proyecto_id) REFERENCES proyectos(id) ON DELETE CASCADE;
+
+CREATE TABLE transacciones (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    tipo ENUM('ingreso', 'gasto') NOT NULL,
+    monto DECIMAL(10,2) NOT NULL,
+    descripcion TEXT NOT NULL,
+    fecha DATE NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE categorias_gastos (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(255) NOT NULL UNIQUE
+);
+
+ALTER TABLE transacciones ADD COLUMN categoria_id INT NULL;
