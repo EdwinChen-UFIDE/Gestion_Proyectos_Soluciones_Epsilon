@@ -62,9 +62,8 @@ if (isset($_GET['plantilla'])) {
 <div class="contenedor">
     <?php foreach ($plantillas as $archivo): ?>
         <?php
-            $numero = preg_replace('/[^0-9]/', '', $archivo); // Extrae el número de la plantilla
-            $thumbnail = $carpeta_thumbnails . 'plantilla' . $numero . '.jpg'; // Ruta de la miniatura
-            // Si no existe la imagen, poner una imagen por defecto
+            $numero = preg_replace('/[^0-9]/', '', $archivo);
+            $thumbnail = $carpeta_thumbnails . 'plantilla' . $numero . '.jpg';
             if (!file_exists(__DIR__ . '/' . $thumbnail)) {
                 $thumbnail = 'https://via.placeholder.com/300x200.png?text=Sin+Vista+Previa';
             }
@@ -73,9 +72,11 @@ if (isset($_GET['plantilla'])) {
             <img src="<?= $thumbnail ?>" alt="Vista previa de Plantilla <?= $numero ?>">
             <h3>Plantilla <?= $numero ?></h3>
             <a href="main.php?plantilla=<?= urlencode($archivo) ?>">Ver Plantilla</a>
+            <a href="descargar.php?archivo=<?= urlencode($archivo) ?>" style="background: green; display: block; margin-top: 10px;">Descargar</a>
         </div>
     <?php endforeach; ?>
 </div>
+
 
 </body>
 </html>
