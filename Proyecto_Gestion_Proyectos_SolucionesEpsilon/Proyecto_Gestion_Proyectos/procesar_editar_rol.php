@@ -1,7 +1,8 @@
 <?php
 // Incluye el archivo de configuración de la base de datos
 require_once 'db_config.php';
-
+require_once 'auth.php'; 
+requireAdmin();
 // Verifica si se enviaron los datos del formulario
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $id = intval($_POST['id']); // ID del rol a editar

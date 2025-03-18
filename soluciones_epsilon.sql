@@ -232,10 +232,8 @@ CREATE TABLE tareas (
     fecha_vencimiento DATE,
     estado_id INT NOT NULL, -- Relación con la tabla estados
     prioridad ENUM('baja', 'media', 'alta', 'urgente') DEFAULT 'media',
-    --proyecto_id INT NOT NULL, -- Relación con proyectos SE DESCARTAN POR EL MOMENTO AL NO TENER PROYECTOS
     usuario_id INT DEFAULT NULL, -- Relación con usuarios en lugar de empleados
     FOREIGN KEY (estado_id) REFERENCES estados(id) ON DELETE RESTRICT,
-    --FOREIGN KEY (proyecto_id) REFERENCES proyectos(id) ON DELETE CASCADE, SE DESCARTAN POR EL MOMENTO AL NO TENER PROYECTOS
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE SET NULL
 );
 

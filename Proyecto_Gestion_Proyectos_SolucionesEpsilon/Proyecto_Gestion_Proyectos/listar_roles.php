@@ -2,12 +2,8 @@
 session_start();
 require_once 'db_config.php';
 Include 'Plantilla.php';
-
-// Verificar si el usuario ha iniciado sesión
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
-    exit();
-}
+require_once 'auth.php'; 
+requireAdmin();
 
 // Conexión a la base de datos
 try {

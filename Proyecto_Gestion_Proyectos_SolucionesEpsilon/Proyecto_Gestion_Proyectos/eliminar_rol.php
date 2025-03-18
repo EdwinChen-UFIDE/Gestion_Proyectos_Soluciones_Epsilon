@@ -1,7 +1,8 @@
 <?php
 // Incluye el archivo de configuración de la base de datos
 require_once 'db_config.php';
-
+require_once 'auth.php'; 
+requireAdmin();
 // Verifica si se ha proporcionado un ID válido en la URL
 if (isset($_GET['id']) && !empty($_GET['id'])) {
     $id = intval($_GET['id']); // Convierte el ID a un entero para seguridad

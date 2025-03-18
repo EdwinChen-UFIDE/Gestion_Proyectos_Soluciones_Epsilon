@@ -1,0 +1,7 @@
+{
+    "require": {
+        "tecnickcom/tc-lib-pdf": "^8.0",
+        "tecnickcom/tcpdf": "^6.8",
+        "phpoffice/phpspreadsheet": "^4.1"
+    }
+}

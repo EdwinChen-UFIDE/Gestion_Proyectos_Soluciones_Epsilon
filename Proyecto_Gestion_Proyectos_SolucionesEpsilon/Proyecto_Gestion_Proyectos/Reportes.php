@@ -23,8 +23,30 @@ try {
 <body>
 <?php MostrarNavbar(); ?>
     <div class="main-container">
-        <div class="form-container" id="Reportes"> 
-            <h2>Placeholder temporal para desarrollo futuro (Reportes)</h2>
+    <h2>Seleccionar Reporte</h2>
+    <form action="procesar_reporte.php" method="GET" target="_blank">
+        <label for="reporte">Tipo de Reporte:</label>
+        <select name="reporte" required>
+            <option value="proyectos_activos">Proyectos Activos</option>
+            <option value="tareas_por_usuario">Tareas por Usuario</option>
+            <option value="tareas_estado">Estados de Tareas</option>
+            <option value="historial_sesiones">Historial de Sesiones</option>
+            <option value="usuarios_activos">Usuarios Activos/Inactivos</option>
+            <option value="productividad_empleados">Productividad por Empleado</option>
+        </select>
+
+        <label for="filtro">Filtro (Opcional):</label>
+        <input type="text" name="filtro" placeholder="Ejemplo: ID de usuario/proyecto">
+
+        <label for="formato">Formato de Exportación:</label>
+        <select name="formato" required>
+        <option value="pdf">PDF</option>
+        <option value="excel">Excel (.xlsx)</option>
+        <option value="csv">CSV</option>
+        </select>
+
+        <button type="submit">Generar PDF</button>
+    </form>
 
 
 </body>

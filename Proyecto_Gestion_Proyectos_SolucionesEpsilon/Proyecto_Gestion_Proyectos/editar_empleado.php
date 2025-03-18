@@ -2,11 +2,8 @@
 session_start();
 require_once 'db_config.php';
 include 'Plantilla.php';
-
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
-    exit();
-}
+require_once 'auth.php'; 
+requireAdmin();
 
 if (isset($_GET['id'])) {
     $id = intval($_GET['id']);

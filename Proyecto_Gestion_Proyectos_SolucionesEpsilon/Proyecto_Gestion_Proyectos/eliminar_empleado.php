@@ -1,6 +1,7 @@
 <?php
 require_once 'db_config.php';
-
+require_once 'auth.php'; 
+requireAdmin();
 if (isset($_GET['id'])) {
     $id = intval($_GET['id']);
 

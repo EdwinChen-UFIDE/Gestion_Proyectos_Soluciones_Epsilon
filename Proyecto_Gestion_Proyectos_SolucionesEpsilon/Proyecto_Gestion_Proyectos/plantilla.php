@@ -39,11 +39,10 @@ function MostrarNavbar()
                         <li class="nav-item"><a class="nav-link" href="RPA.php">RPA</a></li>
                         <li class="nav-item"><a class="nav-link" href="listar_empleados.php">Empleados</a></li>
                         <li class="nav-item"><a class="nav-link" href="listar_evaluaciones.php">Evaluaciones</a></li>
-                    <?php endif; ?>
-                    
+                    <?php endif; ?>     
                     <li class="nav-item"><a class="nav-link" href="listar_proyectos.php">Proyectos</a></li>
-                    <li class="nav-item"><a class="nav-link" href="plantillas/main.php">Plantilla</a></li>
-                    <li class="nav-item"><a class="nav-link" href="Reportes.php">Reportes</a></li>
+                    <li class="nav-item"><a class="nav-link" href="modulo_plantillas.php">Plantilla</a></li>
+                    <li class="nav-item"><a class="nav-link" href="reportes.php">Reportes</a></li>
 
                 </ul> 
 

@@ -2,12 +2,9 @@
 session_start();
 require_once 'db_config.php';
 include 'Plantilla.php';
+require_once 'auth.php'; 
+requireAdmin();
 
-// Verificar si el usuario ha iniciado sesión
-if (!isset($_SESSION['user_id'])) {
-    header("Location: login.php");
-    exit();
-}
 
 // Verifica si se ha proporcionado un ID válido en la URL
 if (isset($_GET['id']) && !empty($_GET['id'])) {

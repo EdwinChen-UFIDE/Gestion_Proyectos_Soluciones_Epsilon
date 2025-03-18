@@ -1,6 +1,7 @@
 <?php
 require_once 'db_config.php';
-
+require_once 'auth.php'; 
+requireAdmin();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $empleado_id = isset($_POST['empleado']) ? intval($_POST['empleado']) : null;
     $fecha = isset($_POST['fecha']) ? trim($_POST['fecha']) : null;

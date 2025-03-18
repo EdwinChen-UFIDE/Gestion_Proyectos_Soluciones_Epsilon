@@ -1,7 +1,8 @@
 <?php
 session_start();
 require_once 'db_config.php';
-
+require_once 'auth.php'; 
+requireAdmin();
 header('Content-Type: application/json');
 
 try {
