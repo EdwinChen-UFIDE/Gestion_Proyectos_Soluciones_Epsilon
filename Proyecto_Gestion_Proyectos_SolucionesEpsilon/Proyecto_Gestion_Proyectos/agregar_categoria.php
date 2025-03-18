@@ -1,6 +1,5 @@
 <?php
 Session_start();
-// db_config.php: Configuración de la base de datos
 require_once 'db_config.php';
 Include 'Plantilla.php';
 
@@ -12,16 +11,28 @@ try {
     die("Error de conexión a la base de datos: " . $e->getMessage());
 }
 
+// Variable para mostrar SweetAlert2 después del registro
+$registro_exitoso = false;
+
 // Procesar la inserción de la categoría de gasto
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $categoria = $_POST['categoria'];
 
-    $sql = "INSERT INTO categorias_gastos (nombre) VALUES (?)";
-    $stmt = $pdo->prepare($sql);
-    if ($stmt->execute([$categoria])) {
-        echo "<p>Categoría de gasto registrada correctamente.</p>";
-    } else {
-        echo "<p>Error al registrar la categoría de gasto.</p>";
+    try {
+        $sql = "INSERT INTO categorias_gastos (nombre) VALUES (?)";
+        $stmt = $pdo->prepare($sql);
+        if ($stmt->execute([$categoria])) {
+            $registro_exitoso = true;
+        }
+    } catch (PDOException $e) {
+        echo "<script>
+                Swal.fire({
+                    title: 'Error en la base de datos',
+                    text: '" . $e->getMessage() . "',
+                    icon: 'error',
+                    confirmButtonText: 'Cerrar'
+                });
+              </script>";
     }
 }
 ?>
@@ -31,23 +42,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Agregar Categoría de Gasto</title>
-    <link rel="stylesheet" href="../CSS/estilos.css">
+    <title>Agregar Categoría</title>
+    <link rel="stylesheet" href="../CSS/contabilidad.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <script>
+        // Ejecutar SweetAlert2 cuando la página haya cargado si la categoría se registró con éxito
+        window.onload = function () {
+            <?php if ($registro_exitoso) : ?>
+                Swal.fire({
+                    title: '¡Éxito!',
+                    text: 'Categoría agregada correctamente.',
+                    icon: 'success',
+                    confirmButtonText: 'OK'
+                }).then(() => {
+                    window.location.href = 'contabilidad.php';
+                });
+            <?php endif; ?>
+        };
+    </script>
 </head>
 <body>
 <?php MostrarNavbar(); ?>
-    <div class="main-container">
-        <div class="form-container">
-            <h2>Agregar Nueva Categoría de Gasto</h2>
-            <form method="POST" action="">
-                <label>Nombre de la Categoría:</label>
-                <input type="text" name="categoria" required><br>
 
-                <button type="submit">Agregar Categoría</button>
-            </form>
-            <br>
-            <a href="contabilidad.php">← Volver a Contabilidad</a>
-        </div>
+    <div class="main-container">
+        <h2>Agregar Nueva Categoría</h2>
+        <form method="POST" action="">
+            <label>Nombre de la Categoría:</label>
+            <input type="text" name="categoria" required><br>
+
+            <button type="submit" class="btn-submit">Agregar Categoría</button>
+        </form>
+        <br>
+        <a href="contabilidad.php"><button class="btn-back">← Volver</button></a>
     </div>
 </body>
 </html>

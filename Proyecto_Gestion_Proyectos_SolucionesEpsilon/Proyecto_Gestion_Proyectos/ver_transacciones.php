@@ -27,13 +27,32 @@ $transacciones = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ver Transacciones</title>
-    <link rel="stylesheet" href="../CSS/estilos.css">
+    <link rel="stylesheet" href="../CSS/contabilidad.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        function confirmarEliminacion(id) {
+            Swal.fire({
+                title: "¿Estás seguro?",
+                text: "No podrás revertir esta acción.",
+                icon: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#d33",
+                cancelButtonColor: "#3085d6",
+                confirmButtonText: "Sí, eliminar",
+                cancelButtonText: "Cancelar"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = "eliminar_transaccion.php?id=" + id;
+                }
+            });
+        }
+    </script>
 </head>
 <body>
 <?php MostrarNavbar(); ?>
     <div class="main-container">
         <h2>Listado de Transacciones</h2>
-        <table border="1">
+        <table>
             <thead>
                 <tr>
                     <th>ID</th>
@@ -42,6 +61,7 @@ $transacciones = $stmt->fetchAll(PDO::FETCH_ASSOC);
                     <th>Descripción</th>
                     <th>Fecha</th>
                     <th>Categoría</th>
+                    <th>Acciones</th>
                 </tr>
             </thead>
             <tbody>
@@ -53,12 +73,23 @@ $transacciones = $stmt->fetchAll(PDO::FETCH_ASSOC);
                         <td><?php echo htmlspecialchars($transaccion['descripcion']); ?></td>
                         <td><?php echo $transaccion['fecha']; ?></td>
                         <td><?php echo $transaccion['categoria'] ?? 'N/A'; ?></td>
+                        <td class="actions">
+                            <a href="editar_transaccion.php?id=<?php echo $transaccion['id']; ?>">
+                                <button class="btn-edit">Editar</button>
+                            </a>
+                            <button class="btn-delete" onclick="confirmarEliminacion(<?php echo $transaccion['id']; ?>)">Eliminar</button>
+                            <a href="generar_recibo.php?id=<?php echo $transaccion['id']; ?>" target="_blank">
+                                <button class="btn-receipt">Generar Recibo</button>
+                            </a>
+                        </td>
                     </tr>
                 <?php endforeach; ?>
             </tbody>
         </table>
         <br>
-        <a href="contabilidad.php">← Volver a Contabilidad</a>
+        <a href="contabilidad.php">
+            <button class="btn-back">← Volver a Contabilidad</button>
+        </a>
     </div>
 </body>
 </html>
