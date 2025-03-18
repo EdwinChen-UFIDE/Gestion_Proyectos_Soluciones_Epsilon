@@ -1,10 +1,10 @@
 <?php
-// Carpeta donde están las plantillas (la misma donde está este archivo main.php)
+// Carpeta donde están las plantillas (dentro de Proyecto_Gestion_Proyectos)
 $carpeta = __DIR__ . '/';
-$carpeta_thumbnails = 'thumbnails/'; // Carpeta de miniaturas
+$carpeta_thumbnails = '../../IMG/'; // Ruta hacia la carpeta IMG que está a nivel general
 
 // Escanear todos los archivos en la carpeta
-$archivos = array_diff(scandir($carpeta), array('..', '.', 'main.php')); // Ignora "." y ".." y main.php mismo
+$archivos = array_diff(scandir($carpeta), array('..', '.', 'main.php')); // Ignora ".", ".." y este archivo
 
 // Filtrar solo archivos que sigan el patrón plantillaX.html
 $plantillas = [];
@@ -29,7 +29,11 @@ if (isset($_GET['plantilla'])) {
     if (file_exists($ruta)) {
         // Mostrar la plantilla seleccionada
         echo file_get_contents($ruta);
-        echo '<p style="text-align:center; margin: 20px;"><a href="main.php" style="padding:10px 20px; background:#007BFF; color:white; text-decoration:none; border-radius:5px;">Volver al menú de plantillas</a></p>';
+        echo '<p style="text-align:center; margin: 20px;">
+                <a href="main.php" style="padding:10px 20px; background:#007BFF; color:white; text-decoration:none; border-radius:5px;">
+                    Volver al menú de plantillas
+                </a>
+              </p>';
         exit;
     } else {
         echo "<h2>La plantilla no existe</h2>";
@@ -64,7 +68,9 @@ if (isset($_GET['plantilla'])) {
         <?php
             $numero = preg_replace('/[^0-9]/', '', $archivo);
             $thumbnail = $carpeta_thumbnails . 'plantilla' . $numero . '.jpg';
-            if (!file_exists(__DIR__ . '/' . $thumbnail)) {
+
+            // Verificar si la imagen realmente existe en la carpeta IMG
+            if (!file_exists(__DIR__ . '/../../IMG/plantilla' . $numero . '.jpg')) {
                 $thumbnail = 'https://via.placeholder.com/300x200.png?text=Sin+Vista+Previa';
             }
         ?>
@@ -76,7 +82,6 @@ if (isset($_GET['plantilla'])) {
         </div>
     <?php endforeach; ?>
 </div>
-
 
 </body>
 </html>
