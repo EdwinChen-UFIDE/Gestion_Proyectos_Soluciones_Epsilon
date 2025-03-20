@@ -21,7 +21,7 @@ function MostrarNavbar()
     <nav class="navbar navbar-expand-lg navbar-dark py-2">
         <div class="container-fluid">
             <!-- Logo y Nombre -->
-            <a href="HomePage.php" class="navbar-brand">
+            <a href="index.php" class="navbar-brand">
                 <img src="../IMG/Logo_SE.png" alt="Logo" width="30" height="30">
                 Soluciones Epsilon
             </a>
