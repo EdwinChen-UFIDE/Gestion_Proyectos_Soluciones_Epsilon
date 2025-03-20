@@ -6,7 +6,7 @@ if (!isset($_SESSION['user_id'])) {
     header("Location: login.php"); // Redirigir al login
     exit();
 }
-
+require_once 'db_config.php';
 include 'Plantilla.php';
 ?>
 
@@ -46,7 +46,7 @@ include 'Plantilla.php';
             background: #f1f1f1;
         }
 
-        button {
+        .add-button {
             background: #28a745;
             color: white;
             padding: 10px 15px;
@@ -56,7 +56,7 @@ include 'Plantilla.php';
             font-size: 16px;
         }
 
-        button:hover {
+        .add-button:hover {
             background: #218838;
         }
 
@@ -123,7 +123,7 @@ include 'Plantilla.php';
         <h2>Subir un Archivo</h2>
         <form id="upload-form" enctype="multipart/form-data">
             <input type="file" name="file" id="file" required>
-            <button type="submit">Subir</button>
+            <button class="add-button"type="submit">Subir</button>
         </form>
 
         <div id="upload-status"></div>

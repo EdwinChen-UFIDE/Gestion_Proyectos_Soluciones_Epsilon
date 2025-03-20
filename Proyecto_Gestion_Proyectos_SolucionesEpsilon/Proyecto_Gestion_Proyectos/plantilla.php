@@ -4,7 +4,7 @@ function MostrarNavbar()
 {
    
     ob_start();
-    include "db_config.php";
+    require_once BASE_PATH . 'db_config.php';
 
     $userRole = isset($_SESSION["role_id"]) ? $_SESSION["role_id"] : '';
 
@@ -20,13 +20,11 @@ function MostrarNavbar()
 
     <nav class="navbar navbar-expand-lg navbar-dark py-2">
         <div class="container-fluid">
-            <!-- Logo y Nombre -->
-            <a href="HomePage.php" class="navbar-brand">
-                <img src="../IMG/Logo_SE.png" alt="Logo" width="30" height="30">
+            <a href="<?= BASE_URL ?>HomePage.php" class="navbar-brand">
+            <img src="<?= IMG_URL ?>Logo_SE.png" alt="Logo" width="30" height="30">
                 Soluciones Epsilon
             </a>
 
-            <!-- Botón responsive para móviles -->
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
                 <span class="navbar-toggler-icon"></span>
             </button>
@@ -34,45 +32,32 @@ function MostrarNavbar()
             <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
                 <ul class="navbar-nav">
                     <?php if ($userRole == 1) : ?>
-                        <!-- Si es Admin -->
-                        <li class="nav-item"><a class="nav-link" href="contabilidad.php">Contabilidad</a></li>
-                        <li class="nav-item"><a class="nav-link" href="RPA.php">RPA</a></li>
-                        <li class="nav-item"><a class="nav-link" href="listar_empleados.php">Empleados</a></li>
-                        <li class="nav-item"><a class="nav-link" href="listar_evaluaciones.php">Evaluaciones</a></li>
+                        <li class="nav-item"><a class="nav-link" href="<?= BASE_URL ?>contabilidad.php">Contabilidad</a></li>
+                        <li class="nav-item"><a class="nav-link" href="<?= BASE_URL ?>RPA.php">RPA</a></li>
+                        <li class="nav-item"><a class="nav-link" href="<?= BASE_URL ?>listar_empleados.php">Empleados</a></li>
+                        <li class="nav-item"><a class="nav-link" href="<?= BASE_URL ?>listar_evaluaciones.php">Evaluaciones</a></li>
                     <?php endif; ?>     
-                    <li class="nav-item"><a class="nav-link" href="listar_proyectos.php">Proyectos</a></li>
-                    <li class="nav-item"><a class="nav-link" href="plantillas/main.php">Plantilla</a></li>
-                    <li class="nav-item"><a class="nav-link" href="reportes.php">Reportes</a></li>
-
+                    <li class="nav-item"><a class="nav-link" href="<?= BASE_URL ?>listar_proyectos.php">Proyectos</a></li>
+                    <li class="nav-item"><a class="nav-link" href="<?= BASE_URL ?>plantillas/main.php">Plantilla</a></li>
+                    <li class="nav-item"><a class="nav-link" href="<?= BASE_URL ?>reportes.php">Reportes</a></li>
                 </ul> 
 
-                <!-- Barra de búsqueda -->
-                <div class="d-flex align-items-center">
-                    <form class="form-inline me-2">
-                        <div class="input-group">
-                            <input class="form-control" type="text" id="busqueda" name="busqueda" 
-                                style="border: 1px solid #000000; max-width: 200px;" placeholder="Buscar" />
-                        </div>
-                    </form>
-
-                    <!-- Iconos -->
-                    <ul class="navbar-nav d-flex flex-row">
-                        <li class="nav-item px-2">
-                            <a class="nav-link" href="#"><i class="fa-solid fa-bell"></i></a>
-                        </li>
-                        <li class="nav-item dropdown px-2">
-                            <a class="nav-link" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="fa-solid fa-user"></i>
-                            </a>
-                            <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                                <li><a class="dropdown-item" href="#">Perfil</a></li>
-                                <li><a class="dropdown-item" href="#">Configuración</a></li>
-                                <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item text-danger" href="logout.php">Cerrar Sesión</a></li>
-                            </ul>
-                        </li>
-                    </ul>
-                </div>
+                <ul class="navbar-nav d-flex flex-row">
+                    <li class="nav-item px-2">
+                        <a class="nav-link" href="#"><i class="fa-solid fa-bell"></i></a>
+                    </li>
+                    <li class="nav-item dropdown px-2">
+                        <a class="nav-link" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                            <i class="fa-solid fa-user"></i>
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="#">Perfil</a></li>
+                            <li><a class="dropdown-item" href="#">Configuración</a></li>
+                            <li><hr class="dropdown-divider"></li>
+                            <li><a class="dropdown-item text-danger" href="<?= BASE_URL ?>logout.php">Cerrar Sesión</a></li>
+                        </ul>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>

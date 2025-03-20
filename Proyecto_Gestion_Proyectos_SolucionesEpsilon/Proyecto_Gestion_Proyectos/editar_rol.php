@@ -2,9 +2,8 @@
 session_start();
 require_once 'db_config.php';
 include 'Plantilla.php';
-require_once 'auth.php'; 
-requireAdmin();
-
+//require_once 'auth.php'; 
+//requireAdmin();
 
 // Verifica si se ha proporcionado un ID válido en la URL
 if (isset($_GET['id']) && !empty($_GET['id'])) {
@@ -33,6 +32,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
     echo "<script>alert('Error: ID no válido.'); window.location.href = 'listar_roles.php';</script>";
     exit();
 }
+
 ?>
 
 <!DOCTYPE html>

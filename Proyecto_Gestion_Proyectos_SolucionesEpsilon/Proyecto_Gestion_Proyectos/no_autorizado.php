@@ -1,6 +1,7 @@
 <?php
 session_start();
 include 'Plantilla.php';
+require_once 'db_config.php';
 ?>
 <!DOCTYPE html>
 <html lang="es">
