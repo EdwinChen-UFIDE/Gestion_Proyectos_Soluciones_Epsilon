@@ -1,4 +1,7 @@
 <?php
+session_start(); // Iniciar sesión
+require_once __DIR__ . '/../db_config.php';
+require_once __DIR__ . '/../plantilla.php';
 // Carpeta donde están las plantillas (dentro de Proyecto_Gestion_Proyectos)
 $carpeta = __DIR__ . '/';
 $carpeta_thumbnails = '../../IMG/'; // Ruta hacia la carpeta IMG que está a nivel general
@@ -48,8 +51,13 @@ if (isset($_GET['plantilla'])) {
 <head>
     <meta charset="UTF-8">
     <title>Selector de Plantillas</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../../CSS/estilos.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&family=Roboto+Slab:wght@400&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        body { font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px; }
+       
         h1 { text-align: center; }
         .contenedor { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; padding: 20px; }
         .tarjeta { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; }
@@ -60,7 +68,7 @@ if (isset($_GET['plantilla'])) {
     </style>
 </head>
 <body>
-
+<?php MostrarNavbar(); ?>
 <h1>Selecciona una Plantilla</h1>
 
 <div class="contenedor">

@@ -67,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Si la consulta se ejecutó correctamente, confirmamos la inserción
         if ($stmt->rowCount() > 0) {
-            echo "<script>alert('Evaluación registrada exitosamente.'); window.location.href = 'homepageAdmin.php';</script>";
+            echo "<script>alert('Evaluación registrada exitosamente.'); window.location.href = 'listar_evaluaciones.php';</script>";
         } else {
             echo "<script>alert('Error: No se pudo insertar la evaluación.'); window.history.back();</script>";
         }

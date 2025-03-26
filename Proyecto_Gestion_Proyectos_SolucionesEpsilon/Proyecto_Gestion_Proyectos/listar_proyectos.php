@@ -48,7 +48,7 @@ $proyectos = $stmt->fetchAll(PDO::FETCH_ASSOC);
     <h2>Lista de Proyectos</h2>
 
     <!-- Filtro por estado -->
-    <form method="GET" action="listarproyectos.php">
+    <form method="GET" action="<?= BASE_URL ?>listar_proyectos.php"">
         <label for="filtro_estado">Filtrar por estado:</label>
         <select name="filtro_estado" onchange="this.form.submit()">
             <option value="">Todos</option>

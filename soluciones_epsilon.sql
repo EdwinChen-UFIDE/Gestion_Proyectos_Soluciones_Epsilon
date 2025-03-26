@@ -199,7 +199,7 @@ COMMIT;
 --Tabla de evaluaciones_desempeno
 CREATE TABLE evaluaciones_desempeno (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    empleado_id INT NOT NULL,
+    usuario_id INT NOT NULL,
     fecha DATE NOT NULL,
     comentarios TEXT,
     puntuacion DECIMAL(3,1) CHECK (puntuacion BETWEEN 1.0 AND 10.0),
@@ -207,7 +207,7 @@ CREATE TABLE evaluaciones_desempeno (
     tareas_completadas INT DEFAULT 0,
     tareas_en_progreso INT DEFAULT 0,
     cumplimiento_plazos FLOAT DEFAULT 0.0,
-    FOREIGN KEY (empleado_id) REFERENCES empleados(id) ON DELETE CASCADE
+    FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
 );
 
 -- Tabla de Estados

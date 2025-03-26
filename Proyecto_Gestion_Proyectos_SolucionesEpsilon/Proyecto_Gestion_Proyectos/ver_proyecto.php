@@ -45,7 +45,7 @@ try {
 
     <a href="editar_proyecto.php?id=<?= $proyecto['id']; ?>" class="btn">Editar</a>
     <a href="eliminar_proyecto.php?id=<?= $proyecto['id']; ?>" class="btn btn-delete">Eliminar</a>
-    <a href="proyectos.php" class="btn">Volver</a>
+    <a href="listar_proyectos.php" class="btn">Volver</a>
 </div>
 
 <script>

@@ -2,6 +2,8 @@
 session_start();
 require_once 'db_config.php';
 include 'Plantilla.php';
+require_once 'auth.php'; 
+requireAdmin();
 
 if (!isset($_GET['id'])) {
     die("ID de proyecto no proporcionado.");
@@ -71,7 +73,7 @@ try {
 
         <button type="submit" class="btn">Guardar Cambios</button>
     </form>
-    <a href="proyectos.php" class="btn">Cancelar</a>
+    <a href="listar_proyectos.php" class="btn">Cancelar</a>
 </div>
 
 </body>

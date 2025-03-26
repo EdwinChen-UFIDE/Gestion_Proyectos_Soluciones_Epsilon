@@ -1,9 +1,9 @@
 <?php
 session_start(); // Iniciar sesión
 
-// Si el usuario ya ha iniciado sesión, redirigirlo al HomePage
+// Si el usuario ya ha iniciado sesión, redirigirlo al index
 if (isset($_SESSION['user_id'])) {
-    header("Location: HomePage.php");
+    header("Location: index.php");
     exit();
 }
 
@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['role_id'] = $user['role_id']; // Guardamos el rol para usarlo en la navbar
 
                 // Mensaje de éxito
-                $_SESSION['alert'] = ['type' => 'success', 'message' => 'Inicio de sesión exitoso.', 'redirect' => 'HomePage.php'];
+                $_SESSION['alert'] = ['type' => 'success', 'message' => 'Inicio de sesión exitoso.', 'redirect' => 'index.php'];
             } else {
                 $_SESSION['alert'] = ['type' => 'error', 'message' => 'Contraseña incorrecta.'];
             }
@@ -67,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar Sesión</title>
-   // <link rel="stylesheet" href="../CSS/estilos.css"> <!-- Enlazar el CSS -->
+    <link rel="stylesheet" href="../CSS/estilos.css"> <!-- Enlazar el CSS -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&family=Roboto+Slab:wght@400&display=swap" rel="stylesheet"> <!-- Incluir la fuente -->
     
     <!-- SweetAlert2 -->
