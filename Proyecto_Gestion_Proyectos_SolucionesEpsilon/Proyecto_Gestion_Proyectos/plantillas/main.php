@@ -1,4 +1,5 @@
 <?php
+session_start(); // Iniciar sesión
 require_once __DIR__ . '/../db_config.php';
 require_once __DIR__ . '/../plantilla.php';
 // Carpeta donde están las plantillas (dentro de Proyecto_Gestion_Proyectos)
@@ -56,7 +57,7 @@ if (isset($_GET['plantilla'])) {
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <style>
-        body { font-family: Arial, sans-serif; background: #f4f4f4; padding: 20px; }
+       
         h1 { text-align: center; }
         .contenedor { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; padding: 20px; }
         .tarjeta { background: white; padding: 15px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; }

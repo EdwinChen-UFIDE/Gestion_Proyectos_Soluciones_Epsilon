@@ -67,7 +67,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Iniciar Sesión</title>
-   // <link rel="stylesheet" href="../CSS/estilos.css"> <!-- Enlazar el CSS -->
+    <link rel="stylesheet" href="../CSS/estilos.css"> <!-- Enlazar el CSS -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&family=Roboto+Slab:wght@400&display=swap" rel="stylesheet"> <!-- Incluir la fuente -->
     
     <!-- SweetAlert2 -->

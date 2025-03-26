@@ -3,6 +3,8 @@ session_start();
 // db_config.php: Configuración de la base de datos
 require_once 'db_config.php';
 include 'Plantilla.php';
+require_once 'auth.php'; 
+requireAdmin();
 // Conexión a la base de datos
 try {
     $pdo = new PDO("mysql:host=$db_host;dbname=$db_name", $db_user, $db_pass);
