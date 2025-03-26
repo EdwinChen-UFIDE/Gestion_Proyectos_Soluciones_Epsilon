@@ -1,8 +1,8 @@
 <?php
 $db_host = 'localhost';
-$db_name = 'soluciones_epsilon';
-$db_user = 'root';
-$db_pass = ''; // Cambiar si tienes contraseña configurada
+$db_name = 'soluci33_soluciones_epsilon';
+$db_user = 'soluci33_Admin';
+$db_pass = 'u_6%qQW=49~Q'; // Cambiar si tienes contraseña configurada
 
 define('BASE_PATH', __DIR__ . '/');
 define('BASE_URL', 'http://localhost/Gestion_Proyectos_Soluciones_Epsilon/Proyecto_Gestion_Proyectos_SolucionesEpsilon/Proyecto_Gestion_Proyectos/');
