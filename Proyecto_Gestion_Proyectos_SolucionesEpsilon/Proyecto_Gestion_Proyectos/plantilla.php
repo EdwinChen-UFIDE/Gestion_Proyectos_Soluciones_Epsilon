@@ -20,7 +20,7 @@ function MostrarNavbar()
 
     <nav class="navbar navbar-expand-lg navbar-dark py-2">
         <div class="container-fluid">
-            <a href="<?= BASE_URL ?>HomePage.php" class="navbar-brand">
+            <a href="<?= BASE_URL ?>index.php" class="navbar-brand">
             <img src="<?= IMG_URL ?>Logo_SE.png" alt="Logo" width="30" height="30">
                 Soluciones Epsilon
             </a>

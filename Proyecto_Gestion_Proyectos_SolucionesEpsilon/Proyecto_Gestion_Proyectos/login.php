@@ -1,9 +1,9 @@
 <?php
 session_start(); // Iniciar sesión
 
-// Si el usuario ya ha iniciado sesión, redirigirlo al HomePage
+// Si el usuario ya ha iniciado sesión, redirigirlo al index
 if (isset($_SESSION['user_id'])) {
-    header("Location: HomePage.php");
+    header("Location: index.php");
     exit();
 }
 
@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $_SESSION['role_id'] = $user['role_id']; // Guardamos el rol para usarlo en la navbar
 
                 // Mensaje de éxito
-                $_SESSION['alert'] = ['type' => 'success', 'message' => 'Inicio de sesión exitoso.', 'redirect' => 'HomePage.php'];
+                $_SESSION['alert'] = ['type' => 'success', 'message' => 'Inicio de sesión exitoso.', 'redirect' => 'index.php'];
             } else {
                 $_SESSION['alert'] = ['type' => 'error', 'message' => 'Contraseña incorrecta.'];
             }
