@@ -17,9 +17,139 @@ SET time_zone = "+00:00";
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
 /*!40101 SET NAMES utf8mb4 */;
 
+-- phpMyAdmin SQL Dump
 --
 -- Base de datos: `soluciones_epsilon`
 --
+CREATE TABLE `roles` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `nombre` varchar(50) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `nombre` (`nombre`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+INSERT INTO `roles` (`id`, `nombre`) VALUES
+(1, 'admin'),
+(2, 'user'),
+(3, 'developer'),
+(4, 'supervisor'),
+(5, 'gerente');
+
+CREATE TABLE `usuarios` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+`nombre` varchar(100) NOT NULL,
+  `apellidos` varchar(100) NOT NULL,
+  `fecha_nacimiento` date NOT NULL,
+  `cedula` varchar(50) NOT NULL,
+  `telefono` varchar(20) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `role_id` int(11) NOT NULL,
+  `creado_en` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`),
+  KEY `role_id` (`role_id`),
+  FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `historial_sesiones` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `usuario_id` int(11) NOT NULL,
+  `ip_address` varchar(45) NOT NULL,
+  `navegador` varchar(255) NOT NULL,
+  `inicio_sesion` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `usuario_id` (`usuario_id`),
+  FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `evaluaciones_desempeno` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `usuario_id` INT NOT NULL,
+    `fecha` DATE NOT NULL,
+    `comentarios` TEXT,
+    `puntuacion` DECIMAL(3,1) CHECK (puntuacion BETWEEN 1.0 AND 10.0),
+    `horas_trabajadas` INT DEFAULT 0,
+    `tareas_completadas` INT DEFAULT 0,
+    `tareas_en_progreso` INT DEFAULT 0,
+    FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `estados` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `nombre` VARCHAR(50) NOT NULL UNIQUE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+INSERT INTO `estados` (`nombre`) VALUES 
+('Por hacer'),
+('En progreso'),
+('Completado'),
+('Cancelado'),
+('Bloqueado');
+
+CREATE TABLE `proyectos` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `nombre` VARCHAR(255) NOT NULL,
+    `cliente` VARCHAR(255) NOT NULL,
+    `fecha_creacion` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `estado` ENUM('En progreso', 'En revisión', 'Finalizado', 'Inactivo') NOT NULL DEFAULT 'En progreso'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+INSERT INTO `proyectos` (`nombre`, `cliente`) VALUES
+('Proyecto A', 'Cliente X'),
+('Proyecto B', 'Cliente Y'),
+('Proyecto C', 'Cliente Z');
+
+CREATE TABLE `tareas` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `nombre` VARCHAR(255) NOT NULL,
+    `descripcion` TEXT,
+    `fecha_asignacion` DATE NOT NULL DEFAULT CURRENT_DATE,
+    `fecha_vencimiento` DATE,
+    `estado_id` INT NOT NULL,
+    `prioridad` ENUM('baja', 'media', 'alta', 'urgente') DEFAULT 'media',
+    `usuario_id` INT DEFAULT NULL,
+    `proyecto_id` INT NOT NULL,
+    FOREIGN KEY (`estado_id`) REFERENCES `estados` (`id`) ON DELETE RESTRICT,
+    FOREIGN KEY (`usuario_id`) REFERENCES `usuarios` (`id`) ON DELETE SET NULL,
+    FOREIGN KEY (`proyecto_id`) REFERENCES `proyectos` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+
+CREATE TABLE `calendario` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `titulo` VARCHAR(255) NOT NULL,
+    `descripcion` TEXT,
+    `fecha_inicio` DATETIME NOT NULL,
+    `fecha_fin` DATETIME NOT NULL,
+    `tipo` ENUM('Tarea', 'Reunión') NOT NULL DEFAULT 'Tarea'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `categorias_gastos` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `nombre` VARCHAR(255) NOT NULL UNIQUE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `transacciones` (
+    `id` INT AUTO_INCREMENT PRIMARY KEY,
+    `tipo` ENUM('ingreso', 'gasto') NOT NULL,
+    `monto` DECIMAL(10,2) NOT NULL,
+    `descripcion` TEXT NOT NULL,
+    `fecha` DATE NOT NULL,
+    `created_at` TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    `categoria_id` INT NULL,
+    FOREIGN KEY (`categoria_id`) REFERENCES `categorias_gastos` (`id`) ON DELETE SET NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--------------------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
 
 -- --------------------------------------------------------
 
@@ -75,14 +205,6 @@ CREATE TABLE `roles` (
 --
 -- Volcado de datos para la tabla `roles`
 --
-
-INSERT INTO `roles` (`id`, `nombre`) VALUES
-(1, 'admin'),
-(3, 'developer'),
-(5, 'gerente'),
-(4, 'supervisor'),
-(2, 'user');
-
 -- --------------------------------------------------------
 
 --

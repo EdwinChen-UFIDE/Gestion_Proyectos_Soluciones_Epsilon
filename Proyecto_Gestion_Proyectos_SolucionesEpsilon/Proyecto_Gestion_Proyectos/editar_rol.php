@@ -1,5 +1,5 @@
 <?php
-session_start();
+Session_start();
 require_once 'db_config.php';
 include 'Plantilla.php';
 require_once 'auth.php'; 
@@ -43,6 +43,7 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
     <title>Editar Rol</title>
     <link rel="stylesheet" href="../CSS/estilos.css"> 
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </head>
 <body>
     <?php MostrarNavbar(); ?>
@@ -74,6 +75,5 @@ if (isset($_GET['id']) && !empty($_GET['id'])) {
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

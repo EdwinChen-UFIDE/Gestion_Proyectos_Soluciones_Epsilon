@@ -11,11 +11,16 @@ try {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $nombre = trim($_POST['nombre']);
+    $apellidos = trim($_POST['apellidos']);
+    $fecha_nacimiento = trim($_POST['fecha_nacimiento']);
+    $cedula = trim($_POST['cedula']);
+    $telefono = trim($_POST['telefono']);
     $email = trim($_POST['email']);
     $password = trim($_POST['password']);
     $role_id = 2;
 
-    if (empty($email) || empty($password)) {
+    if (empty($nombre) || empty($apellidos) || empty($fecha_nacimiento) || empty($cedula) || empty($telefono) || empty($email) || empty($password)) {
         $_SESSION['mensaje'] = "Por favor, completa todos los campos.";
         $_SESSION['mensaje_tipo'] = "error";
         header("Location: register.php");
@@ -40,8 +45,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-        $stmt = $pdo->prepare("INSERT INTO usuarios (email, password, role_id) VALUES (:email, :password, :role_id)");
+
+        $stmt = $pdo->prepare("INSERT INTO usuarios (nombre, apellidos, fecha_nacimiento, cedula, telefono, email, password, role_id) VALUES (:nombre, :apellidos, :fecha_nacimiento, :cedula, :telefono, :email, :password, :role_id)");
         $stmt->execute([
+            'nombre' => $nombre,
+            'apellidos' => $apellidos,
+            'fecha_nacimiento' => $fecha_nacimiento,
+            'cedula' => $cedula,
+            'telefono' => $telefono,
             'email' => $email,
             'password' => $hashed_password,
             'role_id' => $role_id
@@ -74,6 +85,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <h2>Registro de Usuario</h2>
 
         <form method="POST" action="register.php">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" name="nombre" required>
+
+            <label for="apellidos">Apellidos:</label>
+            <input type="text" id="apellidos" name="apellidos" required>
+
+            <label for="fecha_nacimiento">Fecha de Nacimiento:</label>
+            <input type="date" id="fecha_nacimiento" name="fecha_nacimiento" required>
+
+            <label for="cedula">Cédula:</label>
+            <input type="text" id="cedula" name="cedula" required>
+
+            <label for="telefono">Teléfono:</label>
+            <input type="text" id="telefono" name="telefono" required>
+
             <label for="email">Correo Electrónico:</label>
             <input type="email" id="email" name="email" required>
 

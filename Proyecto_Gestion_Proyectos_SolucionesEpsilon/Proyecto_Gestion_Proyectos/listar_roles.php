@@ -12,9 +12,9 @@ try {
 
     // Obtener roles y número de empleados en cada rol
     $stmt = $pdo->query("
-        SELECT r.id, r.nombre, COUNT(e.id) AS num_empleados
+        SELECT r.id, r.nombre, COUNT(e.id) AS num_usuarios
         FROM roles r
-        LEFT JOIN empleados e ON r.id = e.role_id
+        LEFT JOIN usuarios e ON r.id = e.role_id
         GROUP BY r.id, r.nombre
     ");
     $roles = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -56,10 +56,10 @@ try {
                         <tr>
                             <td><?= htmlspecialchars($rol['id']) ?></td>
                             <td><?= htmlspecialchars($rol['nombre']) ?></td>
-                            <td><?= htmlspecialchars($rol['num_empleados']) ?></td>
+                            <td><?= htmlspecialchars($rol['num_usuarios']) ?></td>
                             <td>
                                 <a href="editar_rol.php?id=<?= $rol['id'] ?>" class="btn btn-primary btn-sm">Editar</a>
-                                <a href="eliminar_rol.php?id=<?= $rol['id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('¿Estás seguro de eliminar este rol?');">Eliminar</a>
+                                <a href="javascript:void(0);" class="btn" onclick="confirmarEliminar(<?= $rol['id']; ?>);">Eliminar</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>
@@ -71,17 +71,25 @@ try {
             </tbody>
         </table>
     </div>
-
-    <script>
-    <?php if (isset($_SESSION['alert'])) : ?>
-        Swal.fire({
-            icon: "<?= $_SESSION['alert']['type']; ?>",
-            title: "<?= $_SESSION['alert']['message']; ?>",
-            confirmButtonColor: "#3085d6",
-            confirmButtonText: "Aceptar"
-        });
-        <?php unset($_SESSION['alert']); ?>
-    <?php endif; ?>
-    </script>
 </body>
 </html>
+
+<script>
+    function confirmarEliminar(id) {
+        event.preventDefault();  // Prevenir que el enlace se siga
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "¡Este proyecto se eliminará permanentemente!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // Redirigir al enlace de eliminación con el ID del proyecto
+                window.location.href = "eliminar_rol.php?id=" + id;
+            }
+        });
+    }
+</script>

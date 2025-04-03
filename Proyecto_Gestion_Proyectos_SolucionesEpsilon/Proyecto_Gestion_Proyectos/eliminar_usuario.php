@@ -10,7 +10,7 @@ if (isset($_GET['id'])) {
         $pdo = new PDO("mysql:host=$db_host;dbname=$db_name", $db_user, $db_pass);
         $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-        $stmt = $pdo->prepare("DELETE FROM empleados WHERE id = :id");
+        $stmt = $pdo->prepare("DELETE FROM usuarios WHERE id = :id");
         $stmt->execute(['id' => $id]);
 
         // Guardamos el mensaje en una variable de sesión
@@ -18,12 +18,12 @@ if (isset($_GET['id'])) {
         $_SESSION['alert'] = ['type' => 'success', 'message' => 'Empleado eliminado correctamente.'];
 
         // Redirigir a la lista de empleados
-        header("Location: listar_empleados.php");
+        header("Location: listar_usuarios.php");
         exit();
     } catch (PDOException $e) {
         session_start();
         $_SESSION['alert'] = ['type' => 'error', 'message' => 'Error al eliminar empleado: ' . $e->getMessage()];
-        header("Location: listar_empleados.php");
+        header("Location: listar_usuarios.php");
         exit();
     }
 }

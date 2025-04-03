@@ -1,6 +1,5 @@
 <?php
 session_start();
-// Incluye el archivo de configuración de la base de datos
 require_once 'db_config.php';
 require_once 'auth.php'; 
 requireAdmin();

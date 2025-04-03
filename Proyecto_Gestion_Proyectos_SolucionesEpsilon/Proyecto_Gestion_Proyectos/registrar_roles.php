@@ -1,6 +1,5 @@
 <?php
 session_start();
-// db_config.php: Configuración de la base de datos
 require_once 'db_config.php';
 include 'Plantilla.php';
 require_once 'auth.php'; 
@@ -16,9 +15,9 @@ try {
 // Funciones para la gestión de roles
 function listarRoles($pdo) {
     $sql = "
-        SELECT r.id, r.nombre, COUNT(e.id) AS num_empleados
+        SELECT r.id, r.nombre, COUNT(e.id) AS num_usuarios
         FROM roles r
-        LEFT JOIN empleados e ON r.id = e.role_id
+        LEFT JOIN usuarios e ON r.id = e.role_id
         GROUP BY r.id, r.nombre
     ";
     $stmt = $pdo->query($sql);
@@ -78,7 +77,7 @@ function actualizarRol($pdo, $id, $nombre) {
                     echo "<tr>";
                     echo "<td>{$rol['id']}</td>";
                     echo "<td>{$rol['nombre']}</td>";
-                    echo "<td>{$rol['num_empleados']}</td>";
+                    echo "<td>{$rol['num_usuarios']}</td>";
                     echo "<td>
                         <a href='editar_rol.php?id={$rol['id']}'>Editar</a> |
                         <a href='eliminarRol.php?id={$rol['id']}' onclick='return confirm(\"¿Estás seguro de eliminar este rol?\")'>Eliminar</a>

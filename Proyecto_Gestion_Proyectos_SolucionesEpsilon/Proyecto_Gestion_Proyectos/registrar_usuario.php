@@ -5,6 +5,7 @@ require_once 'db_config.php';
 include 'Plantilla.php';
 require_once 'auth.php'; 
 requireAdmin();
+
 // Conexión a la base de datos
 try {
     $pdo = new PDO("mysql:host=$db_host;dbname=$db_name", $db_user, $db_pass);
@@ -28,7 +29,7 @@ try {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registrar Empleado</title>
+    <title>Registrar Usuario</title>
     <link rel="stylesheet" href="../CSS/estilos.css"> 
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&family=Roboto+Slab:wght@400&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- SweetAlert2 -->
@@ -38,8 +39,8 @@ try {
 <?php MostrarNavbar(); ?>
 
 <div class="form-container"> 
-    <h2>Registrar Nuevo Empleado</h2>
-    <form id="registroEmpleadoForm" method="POST" action="procesar_registro_empleado.php">
+    <h2>Registrar Nuevo Usuario</h2>
+    <form id="registroUsuarioForm" method="POST" action="procesar_registro_usuario.php">
         <label for="nombre">Nombre:</label>
         <input type="text" id="nombre" name="nombre" required>
 
@@ -71,17 +72,17 @@ try {
             <?php endforeach; ?>
         </select>
 
-        <button type="submit">Registrar Empleado</button>
+        <button type="submit">Registrar Usuario</button>
     </form>
 </div>
 
 <script>
-document.getElementById('registroEmpleadoForm').addEventListener('submit', function(event) {
-    event.preventDefault(); // Evita el envío inmediato
+document.getElementById('registroUsuarioForm').addEventListener('submit', function(event) {
+    event.preventDefault();
 
     Swal.fire({
         title: "¿Confirmar Registro?",
-        text: "¿Deseas registrar a este empleado?",
+        text: "¿Deseas registrar a este usuario?",
         icon: "question",
         showCancelButton: true,
         confirmButtonColor: "#3085d6",

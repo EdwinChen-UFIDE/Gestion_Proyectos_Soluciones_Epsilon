@@ -34,7 +34,7 @@ function MostrarNavbar()
                     <?php if ($userRole == 1) : ?>
                         <li class="nav-item"><a class="nav-link" href="<?= BASE_URL ?>contabilidad.php">Contabilidad</a></li>
                         <li class="nav-item"><a class="nav-link" href="<?= BASE_URL ?>RPA.php">RPA</a></li>
-                        <li class="nav-item"><a class="nav-link" href="<?= BASE_URL ?>listar_empleados.php">Empleados</a></li>
+                        <li class="nav-item"><a class="nav-link" href="<?= BASE_URL ?>listar_usuarios.php">Empleados</a></li>
                         <li class="nav-item"><a class="nav-link" href="<?= BASE_URL ?>listar_evaluaciones.php">Evaluaciones</a></li>
                     <?php endif; ?>     
                     <li class="nav-item"><a class="nav-link" href="<?= BASE_URL ?>listar_proyectos.php">Proyectos</a></li>

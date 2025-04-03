@@ -21,7 +21,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'type' => 'error',
             'message' => 'Todos los campos son obligatorios.'
         ];
-        header("Location: editar_empleado.php?id=$id");
+        header("Location: editar_usuario.php?id=$id");
         exit;
     }
 
@@ -37,13 +37,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 'type' => 'error',
                 'message' => 'El rol seleccionado no existe.'
             ];
-            header("Location: editar_empleado.php?id=$id");
+            header("Location: editar_usuario.php?id=$id");
             exit;
         }
 
         // Actualizar el empleado
         $stmt = $pdo->prepare("
-            UPDATE empleados
+            UPDATE usuarios
             SET nombre = :nombre, apellidos = :apellidos, fecha_nacimiento = :fecha_nacimiento,
                 cedula = :cedula, telefono = :telefono, email = :email, role_id = :rol
             WHERE id = :id
@@ -63,14 +63,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             'type' => 'success',
             'message' => 'Empleado actualizado correctamente.'
         ];
-        header("Location: listar_empleados.php");
+        header("Location: listar_usuarios.php");
         exit;
     } catch (PDOException $e) {
         $_SESSION['alert'] = [
             'type' => 'error',
             'message' => 'Error al actualizar: ' . $e->getMessage()
         ];
-        header("Location: editar_empleado.php?id=$id");
+        header("Location: editar_usuario.php?id=$id");
         exit;
     }
 }
