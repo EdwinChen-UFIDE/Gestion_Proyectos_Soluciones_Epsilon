@@ -405,3 +405,34 @@ CREATE TABLE categorias_gastos (
 );
 
 ALTER TABLE transacciones ADD COLUMN categoria_id INT NULL;
+
+CREATE TABLE clientes (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    nombre VARCHAR(100) NOT NULL,
+    correo VARCHAR(100),
+    telefono VARCHAR(20),
+    creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE rpa_programacion_facturas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    cliente_id INT NOT NULL,
+    fecha_facturacion DATE NOT NULL,
+    activa BOOLEAN DEFAULT TRUE,
+    ultima_generacion DATETIME NULL,
+    creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (cliente_id) REFERENCES clientes(id) -- Opcional, si deseas integridad referencial
+);
+
+CREATE TABLE facturas (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    cliente_id INT NOT NULL,
+    fecha_emision DATE NOT NULL,
+    monto DECIMAL(10,2) NOT NULL,
+    descripcion TEXT,
+    generado_por_rpa BOOLEAN DEFAULT FALSE,
+    creado_en TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (cliente_id) REFERENCES clientes(id)
+);
+
+ALTER TABLE facturas ADD enviada BOOLEAN DEFAULT FALSE;
