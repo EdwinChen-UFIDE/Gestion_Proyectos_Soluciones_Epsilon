@@ -1,8 +1,8 @@
 <?php
-require_once 'db_config.php';
 session_start();
-
-
+require_once 'db_config.php';
+require_once 'auth.php'; 
+requireAdmin();
 try {
     $pdo = new PDO("mysql:host=$db_host;dbname=$db_name", $db_user, $db_pass);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -10,7 +10,6 @@ try {
     die("Error de conexión a la base de datos: " . $e->getMessage());
 }
 
-// Obtener datos del usuario autenticado
 if (!isset($_SESSION['user_id'])) {
     die("Error: Usuario no autenticado.");
 }
@@ -18,31 +17,32 @@ if (!isset($_SESSION['user_id'])) {
 $usuario_id = intval($_SESSION['user_id']);
 $es_admin = isset($_SESSION['role_id']) && $_SESSION['role_id'] == 1;
 
-// Obtener valores del filtro
+// Filtros
 $filtro_empleado = $es_admin && isset($_GET['empleado_id']) && $_GET['empleado_id'] !== '' ? intval($_GET['empleado_id']) : null;
 $filtro_fecha = isset($_GET['fecha']) && !empty($_GET['fecha']) ? $_GET['fecha'] : null;
 
-// Construcción de la consulta SQL
+// Construcción SQL
 $sql = "SELECT e.id, e.fecha, e.comentarios, e.puntuacion, e.horas_trabajadas, 
-               e.tareas_completadas, e.tareas_en_progreso, e.cumplimiento_plazos,
-               emp.nombre, emp.apellidos
+               e.tareas_completadas, e.tareas_en_progreso,
+               u.nombre, u.apellidos
         FROM evaluaciones_desempeno e
-        JOIN empleados emp ON e.empleado_id = emp.id";
+        JOIN usuarios u ON e.usuario_id = u.id";
 
 $params = [];
 
-if ($filtro_empleado) {
-    $sql .= " WHERE e.empleado_id = :empleado_id";
-    $params['empleado_id'] = $filtro_empleado;
+if ($es_admin && $filtro_empleado) {
+    $sql .= " WHERE e.usuario_id = :usuario_id";
+    $params['usuario_id'] = $filtro_empleado;
+} else {
+    $sql .= " WHERE e.usuario_id = :usuario_id";
+    $params['usuario_id'] = $usuario_id;
 }
 
 if ($filtro_fecha) {
-    $sql .= $filtro_empleado ? " AND" : " WHERE";
-    $sql .= " DATE(e.fecha) = :fecha";
+    $sql .= " AND DATE(e.fecha) = :fecha";
     $params['fecha'] = $filtro_fecha;
 }
 
-// Ordenar por fecha y ultimos 10 resultados
 $sql .= " ORDER BY e.fecha DESC LIMIT 10";
 
 try {
@@ -53,36 +53,34 @@ try {
     die("Error al obtener evaluaciones: " . $e->getMessage());
 }
 
-// Obtener empleados (solo para admins)
-$empleados = [];
+// Obtener empleados si es admin
+$usuarios = [];
 if ($es_admin) {
     try {
-        $stmt = $pdo->query("SELECT id, nombre, apellidos FROM empleados");
-        $empleados = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        $stmt = $pdo->query("SELECT id, nombre, apellidos FROM usuarios");
+        $usuarios = $stmt->fetchAll(PDO::FETCH_ASSOC);
     } catch (PDOException $e) {
         die("Error al obtener empleados: " . $e->getMessage());
     }
 }
-include 'plantilla.php'
+include 'plantilla.php';
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mis Evaluaciones</title>
     <link rel="stylesheet" href="../CSS/estilos.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body class="bg-light">
-    <?php
-    MostrarNavbar();
-    ?>
-    <div class="container mt-4">
-        <h2 class="text-white p-3 rounded"style="background-color: #0b4c66;">Mis Evaluaciones</h2>
+    <?php MostrarNavbar(); ?>
 
+    <div class="container mt-4">
+        <h2 class="text-white p-3 rounded" style="background-color: #0b4c66;">Mis Evaluaciones</h2>
+        <button class="btn btn-primary mb-3" style="background-color: #0b4c66;" onclick="window.location.href='registrar_evaluacion.php'">Registrar Nueva Evaluación</button>
         <div class="card p-3 mb-3">
             <form method="GET" action="listar_evaluaciones.php" class="row g-3">
                 <?php if ($es_admin): ?>
@@ -90,9 +88,9 @@ include 'plantilla.php'
                         <label for="empleado_id" class="form-label">Empleado:</label>
                         <select id="empleado_id" name="empleado_id" class="form-select">
                             <option value="">Todos</option>
-                            <?php foreach ($empleados as $empleado): ?>
-                                <option value="<?= htmlspecialchars($empleado['id']); ?>" <?= ($filtro_empleado == $empleado['id']) ? 'selected' : ''; ?>>
-                                    <?= htmlspecialchars($empleado['nombre'] . " " . $empleado['apellidos']); ?>
+                            <?php foreach ($usuarios as $usuario): ?>
+                                <option value="<?= htmlspecialchars($usuario['id']); ?>" <?= ($filtro_empleado == $usuario['id']) ? 'selected' : ''; ?>>
+                                    <?= htmlspecialchars($usuario['nombre'] . " " . $usuario['apellidos']); ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
@@ -104,13 +102,13 @@ include 'plantilla.php'
                     <input type="date" id="fecha" name="fecha" value="<?= htmlspecialchars($filtro_fecha); ?>" class="form-control">
                 </div>
 
-                <div class="col-md-2 d-flex align-items-center justify-content-center">
+                <div class="col-md-2 d-flex align-items-end">
                     <button type="submit" class="btn btn-primary w-100" style="background-color: #0b4c66;">Filtrar</button>
                 </div>
             </form>
         </div>
 
-        <!-- Lista de Evaluaciones -->
+        <!-- Evaluaciones -->
         <?php foreach ($evaluaciones as $evaluacion): ?>
             <div class="card mb-3">
                 <div class="card-header bg-white">
@@ -119,24 +117,61 @@ include 'plantilla.php'
                 <div class="card-body">
                     <div class="row">
                         <div class="col-md-4">
-                            <p class="mb-1"><strong>Horas Trabajadas:</strong> <?= htmlspecialchars($evaluacion['horas_trabajadas']); ?> horas</p>
-                            <p class="mb-1"><strong>Tareas Completadas:</strong> <?= htmlspecialchars($evaluacion['tareas_completadas']); ?> tareas</p>
+                            <p><strong>Horas Trabajadas:</strong> <?= htmlspecialchars($evaluacion['horas_trabajadas']); ?> horas</p>
+                            <p><strong>Tareas Completadas:</strong> <?= htmlspecialchars($evaluacion['tareas_completadas']); ?> tareas</p>
                         </div>
                         <div class="col-md-4">
-                            <p class="mb-1"><strong>Cumplimiento de plazos:</strong> <span class="text-success"><?= htmlspecialchars($evaluacion['cumplimiento_plazos']); ?>%</span></p>
+                            <p><strong>Tareas En Progreso:</strong> <?= htmlspecialchars($evaluacion['tareas_en_progreso']); ?> tareas</p>
                         </div>
+                            <?php
+                            $puntuacion = floatval($evaluacion['puntuacion']);
+                            $colorClase = 'bg-success'; // default
+
+                            if ($puntuacion < 5.0) {
+                                $colorClase = 'bg-danger';
+                            } elseif ($puntuacion < 7.0) {
+                                $colorClase = 'bg-warning text-dark';
+                            }
+                            ?>
                         <div class="col-md-4 text-end">
-                            <span class="badge bg-secondary fs-5"><?= number_format($evaluacion['puntuacion'], 1); ?>/10</span>
+                            <span class="badge <?= $colorClase ?> fs-5">
+                                <?= number_format($puntuacion, 1); ?>/10
+                            </span>
                         </div>
                     </div>
                 </div>
                 <div class="card-footer bg-light">
                     <strong>Comentario Adicional:</strong>
-                    <p class="mb-0"><?= htmlspecialchars($evaluacion['comentarios']); ?></p>
+                    <p><?= htmlspecialchars($evaluacion['comentarios']); ?></p>
+                    <?php if ($es_admin): ?>
+    <div class="text-end">
+        <a href="editar_evaluacion.php?id=<?= $evaluacion['id']; ?>" class="btn btn-sm">Editar</a>
+        <a href="javascript:void(0);" class="btn" onclick="confirmarEliminar(<?= $evaluacion['id']; ?>);">Eliminar</a>
+    </div>
+<?php endif; ?>
                 </div>
             </div>
         <?php endforeach; ?>
-
     </div>
 </body>
+
+<script>
+    function confirmarEliminar(id) {
+        event.preventDefault();  // Prevenir que el enlace se siga
+        Swal.fire({
+            title: '¿Estás seguro?',
+            text: "¡Este proyecto se eliminará permanentemente!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Sí, eliminar',
+            cancelButtonText: 'Cancelar',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = "eliminar_evaluacion.php?id=" + id;
+            }
+        });
+    }
+</script>
 </html>
+
