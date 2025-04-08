@@ -56,8 +56,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['programar'])) {
 
     $descripcion = "Factura generada automáticamente el " . $hoy;
 
-    $pdo->prepare("INSERT INTO facturas (cliente_id, fecha_emision, monto, descripcion, generado_por_rpa, enviada) 
-                   VALUES (?, ?, ?, ?, 1, 0)")
+    $pdo->prepare("INSERT INTO facturas (cliente_id, fecha_emision, monto, descripcion, generado_por_rpa, enviada, pagada) 
+                   VALUES (?, ?, ?, ?, 1, 0, 0)")
         ->execute([$cliente_id, $hoy, $monto, $descripcion]);
 
     $stmt = $pdo->prepare("SELECT correo, nombre FROM clientes WHERE id = ?");
@@ -136,6 +136,7 @@ $historial = $pdo->query("SELECT f.*, c.nombre FROM facturas f JOIN clientes c O
 
     <div class="form-container">
         <a href="crear_cliente.php"><button class="btn-add">Registrar Nuevo Cliente</button></a>
+        <a href="reporte_mensual.php"><button class="btn-view">Ver Reporte Mensual</button></a>
     </div>
 
     <div class="form-container">
@@ -163,8 +164,6 @@ $historial = $pdo->query("SELECT f.*, c.nombre FROM facturas f JOIN clientes c O
             <label>Monto a Pagar:</label>
             <input type="number" name="monto_personalizado" min="1" step="0.01" required><br>
 
-            <label><input type="checkbox" name="activa" checked> Activa</label><br>
-
             <button type="submit" name="programar" class="btn-submit">Enviar Factura</button>
         </form>
     </div>
@@ -185,7 +184,12 @@ $historial = $pdo->query("SELECT f.*, c.nombre FROM facturas f JOIN clientes c O
                     <td><?= $h['fecha_emision'] ?></td>
                     <td>₡<?= number_format($h['monto'], 2) ?></td>
                     <td><?= htmlspecialchars($h['descripcion']) ?></td>
-                    <td><?= $h['enviada'] ? '📧 Enviada' : '❌ No enviada' ?></td>
+                    <td>
+                        <select onchange="cambiarEstadoFactura(<?= $h['id'] ?>, this.value)">
+                            <option value="1" <?= $h['pagada'] ? 'selected' : '' ?>>Pagada</option>
+                            <option value="0" <?= !$h['pagada'] ? 'selected' : '' ?>>Impaga</option>
+                        </select>
+                    </td>
                 </tr>
             <?php endforeach; ?>
         </table>
@@ -214,6 +218,39 @@ function buscarCliente() {
                 });
             }
         });
+}
+
+function cambiarEstadoFactura(id, nuevoEstado) {
+    fetch('actualizar_estado_factura.php', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+        body: `id=${id}&estado=${nuevoEstado}`
+    })
+    .then(res => res.json())
+    .then(data => {
+        if (data.success) {
+            Swal.fire({
+                title: 'Actualizado',
+                text: 'El estado de la factura se ha actualizado correctamente.',
+                icon: 'success',
+                timer: 2000,
+                showConfirmButton: false
+            });
+        } else {
+            Swal.fire({
+                title: 'Error',
+                text: data.message || 'Hubo un error al actualizar.',
+                icon: 'error'
+            });
+        }
+    })
+    .catch(() => {
+        Swal.fire({
+            title: 'Error',
+            text: 'No se pudo conectar con el servidor.',
+            icon: 'error'
+        });
+    });
 }
 
 <?php if ($mensaje_exito): ?>

@@ -436,3 +436,5 @@ CREATE TABLE facturas (
 );
 
 ALTER TABLE facturas ADD enviada BOOLEAN DEFAULT FALSE;
+ALTER TABLE facturas ADD pagada TINYINT(1) DEFAULT 0;
+ALTER TABLE facturas ADD fecha_limite DATE DEFAULT NULL;
