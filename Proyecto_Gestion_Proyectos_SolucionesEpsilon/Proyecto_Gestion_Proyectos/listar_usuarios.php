@@ -76,7 +76,7 @@ include 'Plantilla.php';
                     <td><?= htmlspecialchars($usuario['rol']) ?></td>
                     <td>
                         <a href="editar_usuario.php?id=<?= $usuario['id'] ?>" class="btn btn-primary btn-sm">Editar</a>
-                        <button class="btn btn-danger btn-sm" onclick="confirmarEliminacion(<?= $usuario['id'] ?>)">Eliminar</button>
+                        <button class="btn btn-danger " onclick="confirmarEliminacion(<?= $usuario['id'] ?>)">Eliminar</button>
                     </td>
                 </tr>
             <?php endforeach; ?>

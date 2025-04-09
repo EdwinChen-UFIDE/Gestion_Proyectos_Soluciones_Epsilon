@@ -4,6 +4,7 @@ require_once 'db_config.php';
 include 'Plantilla.php';
 require_once 'auth.php'; 
 requireAdmin();
+
 // Conexión a la base de datos
 try {
     $pdo = new PDO("mysql:host=$db_host;dbname=$db_name", $db_user, $db_pass);
@@ -48,7 +49,8 @@ function actualizarRol($pdo, $id, $nombre) {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestión de Roles</title>
     <link rel="stylesheet" href="../CSS/estilos.css">
-   
+    <!-- Incluir SweetAlert -->
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
 <?php MostrarNavbar(); ?>
@@ -94,8 +96,18 @@ function actualizarRol($pdo, $id, $nombre) {
     if (isset($_POST['registrar'])) {
         $nombre = $_POST['nombre'];
         registrarRol($pdo, $nombre);
-        echo "<p>Rol registrado exitosamente.</p>";
-        header("Refresh:0"); 
+        // Mostrar el mensaje de éxito con SweetAlert
+        echo "
+        <script>
+            Swal.fire({
+                icon: 'success',
+                title: 'Rol registrado exitosamente',
+                showConfirmButton: false,
+                timer: 1500 // Redirigir después de 1.5 segundos
+            }).then(function() {
+                window.location.href = 'listar_roles.php'; 
+            });
+        </script>";
     }
     ?>
 </body>

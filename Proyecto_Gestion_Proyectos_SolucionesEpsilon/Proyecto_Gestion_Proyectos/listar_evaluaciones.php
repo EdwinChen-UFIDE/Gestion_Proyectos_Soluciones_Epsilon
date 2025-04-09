@@ -133,22 +133,22 @@ include 'plantilla.php';
                                 $colorClase = 'bg-warning text-dark';
                             }
                             ?>
-                        <div class="col-md-4 text-end">
-                            <span class="badge <?= $colorClase ?> fs-5">
+                            <div class="col-md-4 text-end">
+                                <span class="badge <?= $colorClase ?> fs-5">
                                 <?= number_format($puntuacion, 1); ?>/10
-                            </span>
+                                </span>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <div class="card-footer bg-light">
-                    <strong>Comentario Adicional:</strong>
-                    <p><?= htmlspecialchars($evaluacion['comentarios']); ?></p>
-                    <?php if ($es_admin): ?>
-    <div class="text-end">
-        <a href="editar_evaluacion.php?id=<?= $evaluacion['id']; ?>" class="btn btn-sm">Editar</a>
-        <a href="javascript:void(0);" class="btn" onclick="confirmarEliminar(<?= $evaluacion['id']; ?>);">Eliminar</a>
-    </div>
-<?php endif; ?>
+                    <div class="card-footer bg-light">
+                        <strong>Comentario Adicional:</strong>
+                        <p><?= htmlspecialchars($evaluacion['comentarios']); ?></p>
+                        <?php if ($es_admin): ?>
+                            <div class="text-end">
+                                <a href="editar_evaluacion.php?id=<?= $evaluacion['id']; ?>" class="btn">Editar</a>
+                                <a href="javascript:void(0);" class="btn btn-eliminar"  onclick="confirmarEliminar(<?= $evaluacion['id']; ?>);">Eliminar</a>
+                            </div>
+                        <?php endif; ?>
                 </div>
             </div>
         <?php endforeach; ?>

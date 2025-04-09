@@ -8,7 +8,7 @@
     height: 100%;
     justify-content: center;
     width: 100%;
-    overflow: hidden; /* Evita scroll innecesario */
+    overflow: hidden; 
     backdrop-filter: blur(10px); 
 }
 
@@ -270,8 +270,8 @@ body {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 1000; /* Asegura que siempre esté sobre el contenido */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Añade sombra sutil para separarlo del contenido */
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
 .navbar a {
@@ -295,7 +295,7 @@ body {
     max-width: 500px;
     width: 100%;
     text-align: center;
-    margin-top: 80px; /* Añadir espacio suficiente para que el contenido no quede pegado al navbar */
+    margin-top: 80px; 
 }
 
 /* Título */
@@ -328,8 +328,8 @@ p {
 
 /* Colores de botones */
 .btn:nth-child(1) { background-color: #007bff; color: white; } /* Editar */
-.btn:nth-child(2) { background-color: #28a745; color: white; } /* Eliminar */
-.btn:nth-child(3) { background-color: #dc3545; color: white; } /* Volver */
+.btn:nth-child(2) { background-color: #dc3545; color: white; } /* Eliminar */
+.btn:nth-child(3) { background-color: #ffffff; color: white; } /* Volver */
 
 .btn:active {
     transform: scale(0.95);
@@ -351,7 +351,7 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: flex-start; /* Asegura que el contenido esté alineado desde la parte superior */
+    justify-content: flex-start; 
     min-height: 100vh;
 }
 
@@ -366,8 +366,8 @@ body {
     position: fixed;
     top: 0;
     left: 0;
-    z-index: 1000; /* Asegura que siempre esté sobre el contenido */
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra sutil para separar el navbar del contenido */
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); 
 }
 
 /* Estilo de los enlaces dentro del navbar */
@@ -523,3 +523,63 @@ a.btn:hover {
 a.btn2:hover {
     background-color: #2677a7;
 }
+
+.form-container form .btn-container {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 300px; 
+}
+
+.form-container form .btn {
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    text-align: center;
+    width: 50%;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 1.2rem;
+}
+
+label {
+    font-size: 1.1rem;
+    color: #2C3E50;
+}
+
+select, input[type="text"] {
+    padding: 0.8rem;
+    border: 1px solid #BDC3C7;
+    border-radius: 8px;
+    font-size: 1rem;
+    color: #333;
+    background-color: #ECF0F1;
+    transition: all 0.3s ease;
+}
+
+select:focus, input[type="text"]:focus {
+    outline: none;
+    border-color: #3498db;
+    background-color: #fff;
+}
+
+button.submit-btn {
+    padding: 0.9rem;
+    background-color: #3498db;
+    color: white;
+    font-size: 1.1rem;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+button.submit-btn:hover {
+    background-color: #2980b9;
+}
+

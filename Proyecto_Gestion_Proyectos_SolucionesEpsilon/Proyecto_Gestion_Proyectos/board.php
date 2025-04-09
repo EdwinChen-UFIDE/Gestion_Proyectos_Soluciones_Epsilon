@@ -58,26 +58,169 @@ foreach ($tareas as $tarea) {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.2/dragula.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/dragula/3.7.2/dragula.min.css">
     <style>
-        .kanban-board {
-            display: flex;
-            gap: 20px;
-            padding: 20px;
-        }
-        .kanban-column {
-            flex: 1;
-            background: #f8f9fa;
-            padding: 10px;
-            border-radius: 8px;
-            min-height: 400px;
-        }
-        .kanban-item {
-            background: white;
-            padding: 10px;
-            margin-bottom: 10px;
-            border-radius: 5px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
-    </style>
+    .kanban-board {
+        display: flex;
+        gap: 20px;
+        padding: 20px;
+        background: #fff; 
+        border-radius: 10px;
+        box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); 
+    }
+
+    /* cada columna del Kanban */
+    .kanban-column {
+        flex: 1;
+        background: #f1f1f1; 
+        padding: 15px;
+        border-radius: 8px;
+        min-height: 400px;
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); 
+    }
+
+    /* Títulos de las columnas */
+    .kanban-column h4 {
+        text-align: center;
+        font-weight: bold;
+        font-size: 1.2rem;
+        color: #333; 
+        margin-bottom: 15px;
+    }
+
+    .kanban-item {
+        background: #ffffff; 
+        padding: 15px;
+        margin-bottom: 15px;
+        border-radius: 8px;
+        box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1); 
+        transition: transform 0.2s; 
+    }
+
+    .kanban-item:hover {
+        transform: scale(1.02); 
+    }
+
+    /* Títulos de las tareas */
+    .kanban-item strong {
+        font-size: 1.1rem;
+        color: #333;
+        font-weight: 600; 
+    }
+
+    /* Descripción de las tareas */
+    .kanban-item p {
+        font-size: 0.9rem;
+        color: #666;
+        margin-top: 5px;
+    }
+
+    /* Responsables de las tareas */
+    .kanban-item small {
+        display: block;
+        font-size: 0.8rem;
+        color: #888;
+        margin-top: 10px;
+    }
+
+    /* Botón para agregar tareas */
+    #formulario-tarea button {
+        background: #28a745;
+        color: white;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background 0.3s ease;
+    }
+
+    #formulario-tarea button:hover {
+        background: #218838;
+    }
+
+    /* Formulario para agregar nuevas tareas */
+    #formulario-tarea input, 
+    #formulario-tarea textarea, 
+    #formulario-tarea select {
+        width: 100%;
+        padding: 10px;
+        margin: 10px 0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        font-size: 1rem;
+    }
+
+    #formulario-tarea input[type="text"]:focus,
+    #formulario-tarea textarea:focus,
+    #formulario-tarea select:focus {
+        border-color: #28a745;
+        outline: none;
+    }
+
+    select {
+        background: #f8f9fa;
+        border: 1px solid #ccc;
+        padding: 10px;
+        border-radius: 5px;
+        font-size: 1rem;
+    }
+
+    select:focus {
+        border-color: #28a745;
+    }
+    #formulario-tarea button {
+        background: #007bff; 
+        color: white;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: bold;
+        transition: background 0.3s ease, transform 0.3s ease;
+    }
+
+    #formulario-tarea button:hover {
+        background: #0056b3;
+        transform: scale(1.05); 
+    }
+
+    #formulario-tarea button:active {
+        background: #004085; 
+        transform: scale(1); 
+    }
+
+    #formulario-tarea button:focus {
+        outline: none;
+        box-shadow: 0 0 10px rgba(38, 143, 255, 0.8); 
+    }
+    #agregar-tarea-btn {
+    background-color: #007bff; 
+    color: white;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    font-weight: bold;
+    transition: background 0.3s ease, transform 0.3s ease; 
+}
+
+#agregar-tarea-btn:hover {
+    background-color: #0056b3; 
+    transform: scale(1.05); 
+}
+
+#agregar-tarea-btn:active {
+    background-color: #004085;
+    transform: scale(1); 
+}
+
+#agregar-tarea-btn:focus {
+    outline: none;
+    box-shadow: 0 0 10px rgba(38, 143, 255, 0.8); 
+}
+</style>
+
 </head>
 <body>
     <?php
@@ -102,7 +245,7 @@ foreach ($tareas as $tarea) {
 
         <!-- Mostrar formulario solo si hay un proyecto seleccionado -->
         <?php if ($proyecto_id): ?>
-            <button onclick="mostrarFormulario()">Agregar Tarea</button>
+            <button id="agregar-tarea-btn" onclick="mostrarFormulario()">Agregar Tarea</button>
 
             <div id="formulario-tarea" style="display: none;">
                 <input type="text" id="nombre" placeholder="Nombre de la tarea" required>

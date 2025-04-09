@@ -2,7 +2,6 @@
 
 function MostrarNavbar()
 {
-   
     ob_start();
     require_once BASE_PATH . 'db_config.php';
 
@@ -16,12 +15,13 @@ function MostrarNavbar()
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
         <script src="https://kit.fontawesome.com/0a39c8afa7.js" crossorigin="anonymous"></script>
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- Incluir SweetAlert -->
     </head>
 
     <nav class="navbar navbar-expand-lg navbar-dark py-2">
         <div class="container-fluid">
             <a href="<?= BASE_URL ?>index.php" class="navbar-brand">
-            <img src="<?= IMG_URL ?>Logo_SE.png" alt="Logo" width="30" height="30">
+                <img src="<?= IMG_URL ?>Logo_SE.png" alt="Logo" width="30" height="30">
                 Soluciones Epsilon
             </a>
 
@@ -46,21 +46,42 @@ function MostrarNavbar()
                     <li class="nav-item px-2">
                         <a class="nav-link" href="#"><i class="fa-solid fa-bell"></i></a>
                     </li>
-                    <li class="nav-item dropdown px-2">
-                        <a class="nav-link" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown">
+                    <li class="nav-item px-2">
+                        <a class="nav-link" href="<?= BASE_URL ?>ver_perfil.php">
                             <i class="fa-solid fa-user"></i>
                         </a>
-                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
-                            <li><a class="dropdown-item" href="#">Perfil</a></li>
-                            <li><a class="dropdown-item" href="#">Configuración</a></li>
-                            <li><hr class="dropdown-divider"></li>
-                            <li><a class="dropdown-item text-danger" href="<?= BASE_URL ?>logout.php">Cerrar Sesión</a></li>
-                        </ul>
+                    </li>
+                    <li class="nav-item px-2">
+                        <a class="nav-link text-danger" href="#" id="logoutBtn">
+                            <i class="fa-solid fa-right-from-bracket"></i> 
+                        </a>
                     </li>
                 </ul>
             </div>
         </div>
     </nav>
+
+    <!-- Script de SweetAlert para confirmación de cierre de sesión -->
+    <script>
+        // Mostrar SweetAlert cuando se haga clic en el ícono de cerrar sesión
+        document.getElementById('logoutBtn').addEventListener('click', function(e) {
+            e.preventDefault(); // Evitar el comportamiento por defecto del enlace
+
+            Swal.fire({
+                title: '¿Estás seguro?',
+                text: '¿Quieres cerrar sesión?',
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Sí, cerrar sesión',
+                cancelButtonText: 'Cancelar',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    window.location.href = '<?= BASE_URL ?>logout.php';
+                }
+            });
+        });
+    </script>
 
     <?php
     $output = ob_get_clean();

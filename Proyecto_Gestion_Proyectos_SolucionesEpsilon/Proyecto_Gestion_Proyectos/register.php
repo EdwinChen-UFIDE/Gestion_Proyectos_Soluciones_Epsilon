@@ -1,8 +1,8 @@
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <?php
-require_once 'db_config.php';
 session_start();
-
+require_once 'db_config.php';
+Include 'Plantilla.php';
 try {
     $pdo = new PDO("mysql:host=$db_host;dbname=$db_name", $db_user, $db_pass);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
@@ -77,11 +77,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registro</title>
-    <link rel="stylesheet" href="../CSS/estilos.css">
+    <link rel="stylesheet" href="../CSS/estilos.css"> 
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;600&family=Roboto+Slab:wght@400&display=swap" rel="stylesheet"> 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 <body>
-    <div class="form-container">
+<?php MostrarNavbar(); ?>
+    <div class="form-container"> 
         <h2>Registro de Usuario</h2>
 
         <form method="POST" action="register.php">
@@ -105,8 +107,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             <label for="password">Contraseña:</label>
             <input type="password" id="password" name="password" required>
-
-            <button type="submit">Registrar</button>
+            <div class="btn-container">
+                <button type="submit" class="btn">Registrar</button>
+                <button type="button" class="btn" onclick="window.location.href='login.php';">Iniciar Sesión</button>
+            </div>
         </form>
     </div>
 
