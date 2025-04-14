@@ -86,10 +86,6 @@ $transacciones = $stmt->fetchAll(PDO::FETCH_ASSOC);
                 <?php endforeach; ?>
             </tbody>
         </table>
-        <br>
-        <a href="contabilidad.php">
-            <button class="btn-back">← Volver a Contabilidad</button>
-        </a>
     </div>
 </body>
 </html>

@@ -1,7 +1,7 @@
 <?php
 Session_start();
 require_once 'db_config.php';
-Include 'Plantilla.php';
+include 'Plantilla.php';
 
 // Conexión a la base de datos
 try {
@@ -39,6 +39,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -49,7 +50,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script>
         // Ejecutar SweetAlert2 cuando la página haya cargado si la categoría se registró con éxito
         window.onload = function () {
-            <?php if ($registro_exitoso) : ?>
+            <?php if ($registro_exitoso): ?>
                 Swal.fire({
                     title: '¡Éxito!',
                     text: 'Categoría agregada correctamente.',
@@ -62,19 +63,97 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         };
     </script>
 </head>
+
 <body>
-<?php MostrarNavbar(); ?>
+    <?php MostrarNavbar(); ?>
 
-    <div class="main-container">
-        <h2>Agregar Nueva Categoría</h2>
-        <form method="POST" action="">
-            <label>Nombre de la Categoría:</label>
-            <input type="text" name="categoria" required><br>
+    <style>
+        .form-container {
+            background: #fff;
+            padding: 30px;
+            border-radius: 10px;
+            width: 50%;
+            margin: 40px auto;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
 
-            <button type="submit" class="btn-submit">Agregar Categoría</button>
+        .form-grid {
+            display: grid;
+            grid-template-columns: 160px 1fr;
+            gap: 15px 20px;
+            align-items: center;
+        }
+
+        .form-grid label {
+            font-weight: bold;
+        }
+
+        .form-grid input {
+            width: 100%;
+            padding: 8px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .form-actions {
+            grid-column: 2 / 3;
+            text-align: right;
+            margin-top: 10px;
+        }
+
+        .btn-submit {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .btn-submit:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-back {
+            background-color: #6c757d;
+            color: white;
+            border: none;
+            padding: 8px 18px;
+            border-radius: 8px;
+            cursor: pointer;
+            float: right;
+            margin-top: 20px;
+        }
+
+        .btn-back:hover {
+            background-color: #5a6268;
+        }
+    </style>
+
+    <div class="form-container">
+        <h2 style="text-align:center;">Agregar Nueva Categoría</h2>
+        <form method="POST" class="form-grid">
+            <label for="categoria">Nombre de la Categoría:</label>
+            <input type="text" name="categoria" id="categoria" required>
+
+            <div class="form-actions">
+                <button type="submit" class="btn-submit">Agregar Categoría</button>
+            </div>
         </form>
-        <br>
-        <a href="contabilidad.php"><button class="btn-back">← Volver</button></a>
     </div>
+
+    <?php if ($registro_exitoso): ?>
+        <script>
+            Swal.fire({
+                title: '¡Éxito!',
+                text: 'Categoría agregada correctamente.',
+                icon: 'success',
+                confirmButtonText: 'OK'
+            }).then(() => {
+                window.location.href = 'contabilidad.php';
+            });
+        </script>
+    <?php endif; ?>
 </body>
+
 </html>

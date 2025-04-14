@@ -5,7 +5,7 @@ require_once 'PHPMailer/PHPMailer.php';
 require_once 'PHPMailer/SMTP.php';
 require_once 'PHPMailer/Exception.php';
 require_once 'dompdf/autoload.inc.php';
-Include 'Plantilla.php';
+include 'Plantilla.php';
 
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
@@ -28,19 +28,9 @@ $error_envio = null;
 if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['programar'])) {
     $cliente_id = $_POST['cliente_id'];
     $fecha = $_POST['fecha_facturacion'];
-    $monto = isset($_POST['monto_personalizado']) ? floatval($_POST['monto_personalizado']) : 0;
+    $monto = floatval($_POST['monto_personalizado']);
+    $fecha_limite = date('Y-m-d', strtotime('+7 days', strtotime($fecha)));
     $activa = isset($_POST['activa']) ? 1 : 0;
-
-    if ($monto <= 0) {
-        echo "<script>
-            Swal.fire({
-                title: 'Monto inválido',
-                text: 'Debe ingresar un monto mayor a cero.',
-                icon: 'warning'
-            });
-        </script>";
-        exit;
-    }
 
     $stmt = $pdo->prepare("SELECT COUNT(*) FROM rpa_programacion_facturas WHERE cliente_id = ?");
     $stmt->execute([$cliente_id]);
@@ -56,9 +46,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['programar'])) {
 
     $descripcion = "Factura generada automáticamente el " . $hoy;
 
-    $pdo->prepare("INSERT INTO facturas (cliente_id, fecha_emision, monto, descripcion, generado_por_rpa, enviada, pagada) 
-                   VALUES (?, ?, ?, ?, 1, 0, 0)")
-        ->execute([$cliente_id, $hoy, $monto, $descripcion]);
+    $pdo->prepare("INSERT INTO facturas (cliente_id, fecha_emision, monto, descripcion, fecha_limite, generado_por_rpa, enviada, pagada) 
+                   VALUES (?, ?, ?, ?, ?, 1, 0, 0)")
+        ->execute([$cliente_id, $hoy, $monto, $descripcion, $fecha_limite]);
 
     $stmt = $pdo->prepare("SELECT correo, nombre FROM clientes WHERE id = ?");
     $stmt->execute([$cliente_id]);
@@ -123,151 +113,141 @@ $historial = $pdo->query("SELECT f.*, c.nombre FROM facturas f JOIN clientes c O
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <title>RPA - Facturación</title>
     <link rel="stylesheet" href="../CSS/contabilidad.css">
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+    <style>
+        .form-container {
+            background: #fff;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 25px auto;
+            width: 80%;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: 180px 1fr;
+            gap: 12px 20px;
+            align-items: center;
+        }
+
+        .form-grid label {
+            font-weight: bold;
+        }
+
+        .form-grid input[type="text"],
+        .form-grid input[type="date"],
+        .form-grid input[type="number"],
+        .form-grid select {
+            width: 100%;
+            padding: 6px 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+
+        .form-actions {
+            grid-column: 2 / 3;
+            text-align: right;
+            margin-top: 10px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            margin-bottom: 25px;
+        }
+
+        .btn-group button {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+
+        .btn-group button:hover {
+            background-color: #0056b3;
+        }
+
+        .form-submit {
+            background-color: #28a745;
+            color: white;
+            border-radius: 8px;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+        }
+
+        .form-submit:hover {
+            background-color: #218838;
+        }
+    </style>
 </head>
+
 <body>
-<?php MostrarNavbar(); ?>
-
-<div class="main-container">
+    <?php MostrarNavbar(); ?>
 
     <div class="form-container">
-        <a href="crear_cliente.php"><button class="btn-add">Registrar Nuevo Cliente</button></a>
-        <a href="reporte_mensual.php"><button class="btn-view">Ver Reporte Mensual</button></a>
-    </div>
+        <h2 style="text-align:center;">Enviar Factura</h2>
 
-    <div class="form-container">
-        <h2>Buscar Cliente por ID</h2>
-        <label>ID del Cliente:</label>
-        <input type="number" id="buscar_id" oninput="buscarCliente()" placeholder="Ingrese ID..."><br>
-        <label>Nombre:</label>
-        <input type="text" id="nombre_cliente" readonly>
-    </div>
+        <div class="btn-group" style="margin-top: 15px;">
+            <a href="crear_cliente.php"><button>Registrar Cliente</button></a>
+            <a href="reporte_mensual.php"><button>Ver Reporte Mensual</button></a>
+            <a href="historial_facturas.php"><button>Ver Historial de Facturas</button></a>
+        </div>
 
-    <div class="form-container">
-        <h2>Enviar Factura</h2>
-        <form method="POST">
-            <label>Cliente:</label>
-            <select name="cliente_id" required>
+        <form method="POST" class="form-grid">
+            <label for="cliente_id">Cliente:</label>
+            <select name="cliente_id" id="cliente_id" required>
                 <option value="">Seleccione un cliente</option>
                 <?php foreach ($clientes as $c): ?>
                     <option value="<?= $c['id'] ?>"><?= htmlspecialchars($c['nombre']) ?></option>
                 <?php endforeach; ?>
-            </select><br>
+            </select>
 
-            <label>Fecha de Facturación:</label>
-            <input type="date" name="fecha_facturacion" required><br>
+            <label for="fecha_facturacion">Fecha de Facturación:</label>
+            <input type="date" name="fecha_facturacion" id="fecha_facturacion" required>
 
-            <label>Monto a Pagar:</label>
-            <input type="number" name="monto_personalizado" min="1" step="0.01" required><br>
+            <label for="monto_personalizado">Monto a Pagar:</label>
+            <input type="number" name="monto_personalizado" id="monto_personalizado" min="1" step="0.01" required>
 
-            <button type="submit" name="programar" class="btn-submit">Enviar Factura</button>
+            <label>Estado:</label>
+            <div><input type="checkbox" name="activa" checked> Activa</div>
+
+            <div class="form-actions">
+                <button type="submit" name="programar" class="form-submit">Enviar Factura</button>
+            </div>
         </form>
     </div>
 
-    <div class="form-container">
-        <h2>Historial de Facturas</h2>
-        <table border="1" cellpadding="8" cellspacing="0" style="width:100%;">
-            <tr>
-                <th>Cliente</th>
-                <th>Fecha</th>
-                <th>Monto</th>
-                <th>Descripción</th>
-                <th>Estado</th>
-            </tr>
-            <?php foreach ($historial as $h): ?>
-                <tr>
-                    <td><?= htmlspecialchars($h['nombre']) ?></td>
-                    <td><?= $h['fecha_emision'] ?></td>
-                    <td>₡<?= number_format($h['monto'], 2) ?></td>
-                    <td><?= htmlspecialchars($h['descripcion']) ?></td>
-                    <td>
-                        <select onchange="cambiarEstadoFactura(<?= $h['id'] ?>, this.value)">
-                            <option value="1" <?= $h['pagada'] ? 'selected' : '' ?>>Pagada</option>
-                            <option value="0" <?= !$h['pagada'] ? 'selected' : '' ?>>Impaga</option>
-                        </select>
-                    </td>
-                </tr>
-            <?php endforeach; ?>
-        </table>
-    </div>
-</div>
-
-<script>
-function buscarCliente() {
-    const id = document.getElementById("buscar_id").value;
-    if (id === "") {
-        document.getElementById("nombre_cliente").value = "";
-        return;
-    }
-
-    fetch("buscar_cliente.php?id=" + id)
-        .then(res => res.json())
-        .then(data => {
-            if (data && data.nombre) {
-                document.getElementById("nombre_cliente").value = data.nombre;
-            } else {
-                document.getElementById("nombre_cliente").value = "";
-                Swal.fire({
-                    title: "Cliente no encontrado",
-                    text: "El ID ingresado no está registrado.",
-                    icon: "warning"
-                });
-            }
-        });
-}
-
-function cambiarEstadoFactura(id, nuevoEstado) {
-    fetch('actualizar_estado_factura.php', {
-        method: 'POST',
-        headers: {'Content-Type': 'application/x-www-form-urlencoded'},
-        body: `id=${id}&estado=${nuevoEstado}`
-    })
-    .then(res => res.json())
-    .then(data => {
-        if (data.success) {
+    <?php if (isset($mensaje_exito) && $mensaje_exito): ?>
+        <script>
             Swal.fire({
-                title: 'Actualizado',
-                text: 'El estado de la factura se ha actualizado correctamente.',
-                icon: 'success',
-                timer: 2000,
-                showConfirmButton: false
+                title: 'Proceso Finalizado',
+                text: '<?= $mensaje_exito ?>',
+                icon: '<?= $envio_exitoso ? 'success' : 'warning' ?>'
             });
-        } else {
+        </script>
+    <?php endif; ?>
+
+    <?php if (isset($error_envio) && $error_envio): ?>
+        <script>
             Swal.fire({
-                title: 'Error',
-                text: data.message || 'Hubo un error al actualizar.',
+                title: 'Error de envío',
+                html: 'PHPMailer dijo:<br><?= addslashes($error_envio) ?>',
                 icon: 'error'
             });
-        }
-    })
-    .catch(() => {
-        Swal.fire({
-            title: 'Error',
-            text: 'No se pudo conectar con el servidor.',
-            icon: 'error'
-        });
-    });
-}
-
-<?php if ($mensaje_exito): ?>
-Swal.fire({
-    title: 'Proceso Finalizado',
-    text: '<?= $mensaje_exito ?>',
-    icon: '<?= $envio_exitoso ? 'success' : 'warning' ?>'
-});
-<?php endif; ?>
-
-<?php if ($error_envio): ?>
-Swal.fire({
-    title: 'Error al enviar el correo',
-    html: 'PHPMailer dijo:<br><small><?= addslashes($error_envio) ?></small>',
-    icon: 'error'
-});
-<?php endif; ?>
-</script>
+        </script>
+    <?php endif; ?>
 </body>
+
+
 </html>
